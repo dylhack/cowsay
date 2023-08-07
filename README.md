@@ -1,4 +1,4 @@
-Cowsay bot for Discord with color! (WIP)
+Cowsay bot for Discord with color! (WIP) ([invite URL](https://discord.com/api/oauth2/authorize?client_id=1135038990081347605&permissions=0&scope=applications.commands%20bot))
 
 # Setup
 
