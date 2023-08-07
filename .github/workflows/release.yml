@@ -1,8 +1,8 @@
-name: Build & Publish Docker Image
+name: Publish Release
 
 on:
-  push:
-    branches: [ "main" ]
+  release: 
+    types: [created]
 
 env:
   REGISTRY: ghcr.io
