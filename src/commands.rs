@@ -11,7 +11,7 @@ use serenity::{
         id::GuildId,
         prelude::{application_command::ApplicationCommandInteraction, command::Command},
     },
-    prelude::Context, futures::future::join_all,
+    prelude::Context, futures::future::{join_all, join},
 };
 use std::io;
 
@@ -20,6 +20,7 @@ pub async fn register_all(ctx: &Context) -> io::Result<()> {
     let dev_server = get_dev_server();
 
     if let Some(guild_id) = dev_server {
+        println!("registering commands to dev server.");
         register_to_dev(ctx, cmds, &guild_id).await?;
         return Ok(());
     }
@@ -41,12 +42,27 @@ async fn clear_dev(ctx: &Context, guild_id: &GuildId) {
     join_all(jobs).await;
 }
 
+async fn clear_global(ctx: &Context) {
+    let cmds = ctx.http.get_global_application_commands().await.unwrap_or(vec![]);
+    let mut jobs = vec![];
+
+    for cmd in cmds {
+        let job = ctx.http.delete_global_application_command(cmd.id.0);
+        jobs.push(job);
+    }
+
+    // explicitly not caring about the errors
+    join_all(jobs).await;
+}
+
 async fn register_to_dev(
     ctx: &Context,
     cmds: Vec<CreateApplicationCommand>,
     guild_id: &GuildId,
 ) -> std::io::Result<()> {
-    clear_dev(ctx, guild_id).await;
+    join(clear_dev(ctx, guild_id), clear_global(ctx)).await;
+    
+
     let result = guild_id
         .set_application_commands(&ctx.http, |f| {
             for cmd in cmds {

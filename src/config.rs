@@ -3,10 +3,11 @@ use serenity::model::id::GuildId;
 
 
 pub fn get_dev_server() -> Option<GuildId> {
-    var("DEV_SERVER_ID")
-        .ok()
-        .and_then(|id| id.parse::<u64>().ok())
-        .map(|id| GuildId(id))
+    let val = var("DEV_SERVER_ID");
+    match val.unwrap_or("".to_string()).trim().parse::<u64>() {
+        Ok(val_int) => Some(GuildId(val_int)),
+        Err(_) => None,
+    }
 }
 
 pub fn get_bot_token() -> String {
