@@ -2,10 +2,8 @@ FROM rust:1.71.1-slim-buster as builder
 
 WORKDIR /opt/app
 
-COPY Cargo.toml .
-COPY Cargo.lock .
-RUN cargo build --release
 COPY . .
+RUN cargo build --release
 
 FROM builder AS production
 
