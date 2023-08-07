@@ -1,17 +1,18 @@
 use std::fmt::Debug;
 use crate::types::Result;
-use image::{Rgb, RgbImage, ImageBuffer};
+use image::{ImageBuffer, RgbaImage, Rgba};
 use rusttype::{Font, Scale};
 use imageproc::drawing::draw_text_mut;
 use ansi_colours::rgb_from_ansi256;
 
 
-const BREAK: char = '\x1B';
+const START: char = '\x1B';
 const END: char = 'm';
 const SEP: char = ';';
+const VISIBLE: u8 = 255;
 
 type Blocks = Vec<Vec<Block>>;
-type Color = Rgb<u8>;
+type Color = Rgba<u8>;
 type RawColor = [u8; 3];
 type Image = ImageBuffer<Color, Vec<u8>>;
 
@@ -66,7 +67,7 @@ fn to_rgb(x: &RawColor) -> Option<Color> {
     }
 
     let result = rgb_from_ansi256(color_ansi);
-    Some(Rgb([result.0, result.1, result.2]))
+    Some(Rgba([result.0, result.1, result.2, VISIBLE]))
 }
 
 fn is_cancel(x: &RawColor) -> bool {
@@ -79,7 +80,7 @@ fn parse(data: &str, last_color: &Option<Color>) -> Vec<Block> {
     let mut color = last_color.clone();
 
     data.chars().for_each(|c| {
-        if c == BREAK {
+        if c == START {
             tmp.push(c);
         } else if tmp.len() > 0 {
             if c == END {
@@ -134,7 +135,7 @@ fn get_size(font_height: &u32, data: &Blocks) -> (u32, u32) {
 fn to_image(data: &Blocks) -> Result<Image> {
     let font_height: i32 = 20;
     let (w, h) = get_size(&(font_height as u32), data);
-    let mut image = RgbImage::new(w, h);
+    let mut image = RgbaImage::new(w, h);
     let font = Vec::from(include_bytes!("JetBrainsMono.ttf") as &[u8]);
     let font = Font::try_from_vec(font).ok_or("Failed to get font family, how did this happen?")?;
 
@@ -152,7 +153,7 @@ fn to_image(data: &Blocks) -> Result<Image> {
         }
         for block in line {
             // NOTE(dylhack): default is white for plain-text characters. (ie the cowsay bubble)
-            let color = block.color.unwrap_or(Rgb([255, 255, 255]));
+            let color = block.color.unwrap_or(Rgba([255, 255, 255, VISIBLE]));
             let mut char = block.char;
             if char == ' ' && block.color.is_some() {
                 char = '█';
