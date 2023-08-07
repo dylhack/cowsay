@@ -1,4 +1,4 @@
-[![Build & Publish Docker Image](https://github.com/dylhack/cowsay-bot/actions/workflows/main.yml/badge.svg)](https://github.com/dylhack/cowsay-bot/actions/workflows/main.yml)
+[![Publish Release](https://github.com/dylhack/cowsay-bot/actions/workflows/release.yml/badge.svg)](https://github.com/dylhack/cowsay-bot/actions/workflows/release.yml)
 
 Cowsay bot for Discord with color! (WIP) ([invite URL](https://discord.com/api/oauth2/authorize?client_id=1135038990081347605&permissions=0&scope=applications.commands%20bot))
 
