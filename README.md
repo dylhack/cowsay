@@ -10,9 +10,19 @@ Docker is recommended for setup.
 docker run -d -e BOT_TOKEN=token ghcr.io/dylhack/cowsay-bot:main
 ```
 
-**TODO**
+## Without Docker
 
- - [ ] `/cowsay fortune` command (utilize fortune-mod database)
- - [ ] Give the images true transparency instead of a black background
- - [x] Support all characters ([resolved](https://github.com/dylhack/cowsay-bot/commit/f97684a20aef158a7546a540939b0d12054702b8))
- - [x] Publish for ARMv7 ([resolved](https://github.com/dylhack/cowsay-bot/commit/514503e68ec78ed4d3fb3c4d4b839725210bb650))
+You can use this setup also for development. If you plan on developing make 
+sure to set the `DEV_SERVER_ID` in the `.env`.
+
+**Requirements**
+
+ - [Rust](https://www.rust-lang.org/)
+
+```sh
+git clone https://github.com/dylhack/cowsay-bot
+cd cowsay-bot
+cp .env.example .env
+# Make sure to set the BOT_TOKEN before running
+cargo run
+```
