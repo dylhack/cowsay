@@ -12,7 +12,7 @@ use serenity::{
 };
 
 // 510 = Four lines of wrapped text
-static MAX_LENGTH: u16 = 510;
+// static MAX_LENGTH: u16 = 510;
 
 pub fn register(grp: &mut CreateApplicationCommandOption) {
     grp.kind(CommandOptionType::SubCommand);
@@ -21,7 +21,7 @@ pub fn register(grp: &mut CreateApplicationCommandOption) {
         opt.name("text")
             .description("The text to say")
             .kind(CommandOptionType::String)
-            .max_length(MAX_LENGTH)
+            // .max_length(MAX_LENGTH)
             .required(true);
         opt
     });
