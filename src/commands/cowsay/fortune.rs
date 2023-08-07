@@ -4,7 +4,7 @@ use serenity::{
     prelude::Context,
 };
 use crate::{
-    cowsay::{get_fortune, cowsay},
+    cowsay::get_fortune,
     types::CommandResult,
     commands::cowsay::internal::respond,
 };
@@ -16,7 +16,5 @@ pub fn register(grp: &mut CreateApplicationCommandOption) {
 
 pub async fn handle(ctx: &Context, cmd: &ApplicationCommandInteraction) -> CommandResult {
     let fortune = get_fortune();
-    let say = cowsay(&fortune)?;
-
-    respond(ctx, cmd, &say).await
+    respond(ctx, cmd, &fortune).await
 }
