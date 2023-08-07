@@ -5,7 +5,7 @@ use crate::types::Result;
 
 pub fn cowsay(character: &str, msg: &str) -> Result<String> {
     let cow = Builtin(String::from(character));
-    let result = format_character(msg, &cow, 30, charasay::bubbles::BubbleType::Round);
+    let result = format_character(msg, &cow, 80, charasay::bubbles::BubbleType::Round);
 
     if let Err(why) = result {
         Err(format!("Failed to create cowsay, {}", why))
