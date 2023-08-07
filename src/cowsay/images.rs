@@ -10,6 +10,8 @@ const START: char = '\x1B';
 const END: char = 'm';
 const SEP: char = ';';
 const VISIBLE: u8 = 255;
+const CHAR: char = '█';
+const ORIGINAL_CHAR: char = ' ';
 
 type Blocks = Vec<Vec<Block>>;
 type Color = Rgba<u8>;
@@ -136,8 +138,11 @@ fn to_image(data: &Blocks) -> Result<Image> {
     let font_height: i32 = 20;
     let (w, h) = get_size(&(font_height as u32), data);
     let mut image = RgbaImage::new(w, h);
-    let font = Vec::from(include_bytes!("JetBrainsMono.ttf") as &[u8]);
+    let font = Vec::from(include_bytes!("font/JetBrainsMonoNerdFont-Regular.ttf") as &[u8]);
     let font = Font::try_from_vec(font).ok_or("Failed to get font family, how did this happen?")?;
+
+    let bold_font = Vec::from(include_bytes!("font/JetBrainsMonoNerdFont-Bold.ttf") as &[u8]);
+    let bold_font = Font::try_from_vec(bold_font).ok_or("Failed to get font family, how did this happen?")?;
 
     let scale = Scale {
         x: font_height as f32,
@@ -154,10 +159,8 @@ fn to_image(data: &Blocks) -> Result<Image> {
         for block in line {
             // NOTE(dylhack): default is white for plain-text characters. (ie the cowsay bubble)
             let color = block.color.unwrap_or(Rgba([255, 255, 255, VISIBLE]));
-            let mut char = block.char;
-            if char == ' ' && block.color.is_some() {
-                char = '█';
-            }
+            let char = if block.char == ORIGINAL_CHAR && block.color.is_some() { CHAR } else { block.char };
+            let font = if char == CHAR { &font } else { &bold_font };
             draw_text_mut(&mut image, color, x, y, scale, &font, &String::from(char));
             x += (font_height / 2) - 1;
         }
