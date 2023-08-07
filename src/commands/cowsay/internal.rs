@@ -11,9 +11,10 @@ use serenity::{
 pub async fn respond(
     ctx: &Context,
     cmd: &ApplicationCommandInteraction,
+    character: &str,
     text: &str,
 ) -> CommandResult {
-    let sample = cowsay(text)?;
+    let sample = cowsay(character, text)?;
     let image = cowsay_to_image(&sample)?;
     let file_path = get_path(&format!("{}.png", cmd.id))?;
 

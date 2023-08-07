@@ -3,8 +3,8 @@ use charasay::{format_character, Chara::Builtin};
 use crate::types::Result;
 
 
-pub fn cowsay(msg: &str) -> Result<String> {
-    let cow = Builtin(String::from("cow"));
+pub fn cowsay(character: &str, msg: &str) -> Result<String> {
+    let cow = Builtin(String::from(character));
     let result = format_character(msg, &cow, 30, charasay::bubbles::BubbleType::Round);
 
     if let Err(why) = result {

@@ -16,5 +16,5 @@ pub fn register(grp: &mut CreateApplicationCommandOption) {
 
 pub async fn handle(ctx: &Context, cmd: &ApplicationCommandInteraction) -> CommandResult {
     let fortune = get_fortune();
-    respond(ctx, cmd, &fortune).await
+    respond(ctx, cmd, "cow", &fortune).await
 }

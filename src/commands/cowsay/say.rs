@@ -10,6 +10,7 @@ use serenity::{
     },
     prelude::Context,
 };
+use charasay::BUILTIN_CHARA;
 
 // 510 = Four lines of wrapped text
 // static MAX_LENGTH: u16 = 510;
@@ -23,6 +24,17 @@ pub fn register(grp: &mut CreateApplicationCommandOption) {
             .kind(CommandOptionType::String)
             // .max_length(MAX_LENGTH)
             .required(true);
+        opt
+    });
+    grp.create_sub_option(|opt| {
+        opt.name("character").description("Character to display.")
+            .kind(CommandOptionType::String)
+            .required(false);
+        
+        for character in BUILTIN_CHARA {
+            opt.add_string_choice(character, character);
+        }
+
         opt
     });
 }
@@ -39,7 +51,14 @@ pub async fn handle(
         .value
         .as_ref()
         .ok_or("Text to say not found")?;
+    let mut chara = "cow";
+    if let Some(chara_arg) = subcmd.options.get(1) {
+        let chara_val = chara_arg.value.as_ref();
+        if let Some(chara_str)  = chara_val {
+            chara = chara_str.as_str().unwrap_or("cow");
+        }
+    }
     let say = text_arg.as_str().ok_or("Failed to parse text as string")?;
 
-    respond(ctx, cmd, &say).await
+    respond(ctx, cmd, &chara, &say).await
 }
