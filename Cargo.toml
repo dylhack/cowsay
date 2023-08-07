@@ -14,7 +14,7 @@ rusttype = "0.9.3"
 [dependencies.image]
 version = "0.24.6"
 default-features = false
-features = ["png"]
+features = ["webp", "webp-encoder"]
 
 [dependencies.serenity]
 version = "0.11.6"
