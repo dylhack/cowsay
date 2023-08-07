@@ -1,4 +1,10 @@
-[![Publish Release](https://github.com/dylhack/cowsay-bot/actions/workflows/release.yml/badge.svg)](https://github.com/dylhack/cowsay-bot/actions/workflows/release.yml)
+<div align="middle" float="left">
+  <a href="https://discord.gg/NjSg2U6R"><img src="https://img.shields.io/badge/Discord-Join%20our%20Discord!-green?labelColor=5865F2&style=social&logo=discord&link=https://discord.gg/NjSg2U6R" alt="Discord" /></a>
+ 
+ <br>
+
+ [![Publish Release](https://github.com/dylhack/cowsay-bot/actions/workflows/release.yml/badge.svg)](https://github.com/dylhack/cowsay-bot/actions/workflows/release.yml)
+</div>
 
 Cowsay bot for Discord with color! (WIP) ([invite URL](https://discord.com/api/oauth2/authorize?client_id=1135038990081347605&permissions=0&scope=applications.commands%20bot))
 
