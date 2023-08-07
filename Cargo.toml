@@ -8,9 +8,13 @@ edition = "2021"
 [dependencies]
 ansi_colours = "1.2.2"
 charasay = "3.0.1"
-image = "0.24.6"
 imageproc = "0.23.0"
 rusttype = "0.9.3"
+
+[dependencies.image]
+version = "0.24.6"
+default-features = false
+features = ["png"]
 
 [dependencies.serenity]
 version = "0.11.6"
