@@ -1,4 +1,5 @@
-use crate::{commands::cowsay::internal::respond, cowsay::get_fortune, types::CommandResult};
+use crate::{cowsay::get_fortune, types::CommandResult};
+use super::respond;
 use serenity::{
     builder::CreateApplicationCommandOption,
     model::prelude::{

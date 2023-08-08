@@ -1,9 +1,6 @@
 mod bot;
-mod commands;
 mod config;
 mod cowsay;
-mod embeds;
-mod events;
 mod tmp;
 mod types;
 

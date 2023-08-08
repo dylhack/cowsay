@@ -2,7 +2,7 @@ mod cowsay;
 
 use crate::{
     config::get_dev_server,
-    embeds::create_error_embed,
+    bot::embeds::create_error_embed,
     types::{CommandResult, Response},
 };
 use serenity::{

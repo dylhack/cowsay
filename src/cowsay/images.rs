@@ -178,7 +178,9 @@ pub fn cowsay_to_image(data: &String) -> Result<Image> {
 }
 
 mod tests {
+    #[allow(unused_imports)]
     use super::*;
+    #[allow(unused_imports)]
     use crate::tmp::get_path;
 
     #[test]
