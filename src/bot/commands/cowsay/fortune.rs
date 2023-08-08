@@ -29,9 +29,7 @@ pub fn register(grp: &mut CreateApplicationCommandOption) {
 pub async fn handle(ctx: &Context, cmd: &ApplicationCommandInteraction, subcmd: &CommandDataOption) -> CommandResult {
     let fortune = get_fortune();
     let mut chara = "cow";
-    println!("subcmd: {:?}", subcmd.options);
     if let Some(chara_arg) = subcmd.options.get(0) {
-        println!("chara_arg: {:?}", chara_arg);
         let chara_val = chara_arg.value.as_ref();
         if let Some(chara_str) = chara_val {
             chara = chara_str.as_str().unwrap_or("cow");

@@ -180,7 +180,7 @@ pub fn cowsay_to_image(data: &String) -> Result<Image> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::tmp::get_path;
+    use crate::{tmp::get_path, cowsay::{cowsay, BUILTIN_CHARA}};
 
     #[test]
     fn test_chop() {
@@ -287,5 +287,14 @@ mod tests {
         let image = cowsay_to_image(&input).unwrap();
         let file_path = get_path(&format!("{}.webp", "test")).unwrap();
         assert!(image.save(file_path).is_ok());
+    }
+
+    #[test]
+    pub fn test_all_charas() {
+        for chara in BUILTIN_CHARA {
+            let msg = cowsay(chara, "Hello world").unwrap();
+            let result = cowsay_to_image(&msg);
+            assert!(result.is_ok());
+        }
     }
 }
