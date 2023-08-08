@@ -1,6 +1,6 @@
 <div align="middle" float="left">
 
-   <img alt="Ferris saying Cowsay for Discord!" src="docs/ferris.webp" />
+   <img alt="Ferris saying Cowsay for Discord!" src="docs/readme-ferris.webp" />
 
   <br>
 
