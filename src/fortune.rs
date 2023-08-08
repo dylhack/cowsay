@@ -4,7 +4,7 @@ type Fortunes = Vec<String>;
 macro_rules! fortune {
     ($file:expr) => {
         include_bytes!(concat!(
-            "../assets/fortune-mod/datfiles/",
+            "../assets/fortune/datfiles/",
             $file
         ))
     };
@@ -58,7 +58,7 @@ const DATABASES: [&DB; 43] = [
 
 // ...fortune text...\n%
 // \n% = end of fortune
-fn parse_db(db: &[u8]) -> Fortunes {
+fn parse_db(db: &DB) -> Fortunes {
     let mut fortunes = Vec::new();
     let mut fortune = String::new();
 
