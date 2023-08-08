@@ -59,7 +59,7 @@ pub async fn handle(ctx: &Context, cmd: &ApplicationCommandInteraction) -> Comma
     let subcmd = cmd.data.options.get(0).ok_or("Subcommand not found")?;
 
     match subcmd.name.as_str() {
-        "fortune" => fortune::handle(ctx, cmd).await,
+        "fortune" => fortune::handle(ctx, cmd, subcmd).await,
         "say" => say::handle(ctx, cmd, subcmd).await,
         other => Err(format!("Command not found `{}`", other)),
     }

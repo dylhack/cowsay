@@ -321,6 +321,7 @@ dependencies = [
  "charasay",
  "image",
  "imageproc",
+ "rand 0.8.5",
  "rusttype",
  "serenity",
  "tokio",

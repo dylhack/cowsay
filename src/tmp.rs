@@ -27,8 +27,8 @@ pub fn get_path<T: Display>(file_name: &T) -> Result<String> {
     Ok(format!("{ROOT}/{file_name}"))
 }
 
+#[cfg(test)]
 mod test {
-    #[allow(unused_imports)]
     use super::*;
 
     #[test]

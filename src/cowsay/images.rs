@@ -135,10 +135,10 @@ fn to_image(data: &Blocks) -> Result<Image> {
     let font_height: i32 = 20;
     let (w, h) = get_size(&(font_height as u32), data);
     let mut image = RgbaImage::new(w, h);
-    let font = Vec::from(include_bytes!("font/JetBrainsMonoNerdFont-Regular.ttf") as &[u8]);
+    let font = Vec::from(include_bytes!("../../assets/font/JetBrainsMonoNerdFont-Regular.ttf") as &[u8]);
     let font = Font::try_from_vec(font).ok_or("Failed to get font family, how did this happen?")?;
 
-    let bold_font = Vec::from(include_bytes!("font/JetBrainsMonoNerdFont-Bold.ttf") as &[u8]);
+    let bold_font = Vec::from(include_bytes!("../../assets/font/JetBrainsMonoNerdFont-Bold.ttf") as &[u8]);
     let bold_font =
         Font::try_from_vec(bold_font).ok_or("Failed to get font family, how did this happen?")?;
 
@@ -177,10 +177,9 @@ pub fn cowsay_to_image(data: &String) -> Result<Image> {
     to_image(&res)
 }
 
+#[cfg(test)]
 mod tests {
-    #[allow(unused_imports)]
     use super::*;
-    #[allow(unused_imports)]
     use crate::tmp::get_path;
 
     #[test]
