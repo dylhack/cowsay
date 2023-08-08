@@ -4,13 +4,13 @@ type Fortunes = Vec<String>;
 macro_rules! fortune {
     ($file:expr) => {
         include_bytes!(concat!(
-            "../assets/fortune-mod/fortune-mod/datfiles/",
+            "../assets/fortune-mod/datfiles/",
             $file
         ))
     };
 }
 
-const DATABASES: [&DB; 42] = [
+const DATABASES: [&DB; 43] = [
     fortune!("art"),
     fortune!("ascii-art"),
     fortune!("cookie"),
@@ -25,6 +25,7 @@ const DATABASES: [&DB; 42] = [
     fortune!("work"),
     fortune!("drugs"),
     fortune!("fortunes"),
+    fortune!("disclaimer"),
     fortune!("knghtbrd"),
     fortune!("love"),
     fortune!("miscellaneous"),
