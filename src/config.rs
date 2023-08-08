@@ -1,6 +1,5 @@
-use std::env::var;
 use serenity::model::id::GuildId;
-
+use std::env::var;
 
 pub fn get_dev_server() -> Option<GuildId> {
     let val = var("DEV_SERVER_ID");

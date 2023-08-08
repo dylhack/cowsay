@@ -1,9 +1,9 @@
-use crate::{
-    config::get_bot_token,
-    events::Handler,
-};
+mod events;
+mod commands;
+mod embeds;
+use crate::config::get_bot_token;
+use events::Handler;
 use serenity::{client::ClientBuilder, prelude::GatewayIntents};
-
 
 pub async fn start() {
     let token = get_bot_token();
