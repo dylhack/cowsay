@@ -22,7 +22,7 @@
 Docker is recommended for setup.
 
 ```sh
-docker run -d -e BOT_TOKEN=token ghcr.io/dylhack/cowsay-bot:main
+docker run -d -e BOT_TOKEN=token ghcr.io/dylhack/cowsay-bot:latest
 ```
 
 ## Without Docker
