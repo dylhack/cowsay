@@ -1,6 +1,5 @@
-use crate::types::CommandResult;
+use crate::{types::CommandResult, cowsay::BUILTIN_CHARA};
 use super::respond;
-use charasay::BUILTIN_CHARA;
 use serenity::{
     builder::CreateApplicationCommandOption,
     model::prelude::{
