@@ -1,6 +1,7 @@
 mod bot;
 mod config;
 mod cowsay;
+mod fortune;
 mod tmp;
 mod types;
 

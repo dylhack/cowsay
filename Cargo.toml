@@ -9,6 +9,7 @@ edition = "2021"
 ansi_colours = "1.2.2"
 charasay = "3.0.1"
 imageproc = "0.23.0"
+rand = "0.8.5"
 rusttype = "0.9.3"
 
 [dependencies.image]

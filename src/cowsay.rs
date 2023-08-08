@@ -12,8 +12,3 @@ pub fn cowsay(character: &str, msg: &str) -> Result<String> {
         Ok(result.unwrap())
     }
 }
-
-pub fn get_fortune() -> String {
-    // TODO(dylhack): Implement fortune
-    String::from("Not implemented yet.")
-}
