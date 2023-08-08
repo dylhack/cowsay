@@ -4,7 +4,7 @@ use charasay::BUILTIN_CHARA;
 use serenity::{
     builder::CreateApplicationCommandOption,
     model::prelude::{
-        application_command::ApplicationCommandInteraction, command::CommandOptionType,
+        application_command::{ApplicationCommandInteraction, CommandDataOption}, command::CommandOptionType,
     },
     prelude::Context,
 };
@@ -27,7 +27,15 @@ pub fn register(grp: &mut CreateApplicationCommandOption) {
         });
 }
 
-pub async fn handle(ctx: &Context, cmd: &ApplicationCommandInteraction) -> CommandResult {
+pub async fn handle(ctx: &Context, cmd: &ApplicationCommandInteraction, subcmd: &CommandDataOption) -> CommandResult {
     let fortune = get_fortune();
-    respond(ctx, cmd, "cow", &fortune).await
+    let mut chara = "cow";
+    if let Some(chara_arg) = subcmd.options.get(1) {
+        let chara_val = chara_arg.value.as_ref();
+        if let Some(chara_str) = chara_val {
+            chara = chara_str.as_str().unwrap_or("cow");
+        }
+    }
+
+    respond(ctx, cmd, chara, &fortune).await
 }
