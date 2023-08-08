@@ -7,11 +7,12 @@ use crate::{
 };
 use serenity::{
     builder::CreateApplicationCommand,
+    futures::future::{join, join_all},
     model::{
         id::GuildId,
         prelude::{application_command::ApplicationCommandInteraction, command::Command},
     },
-    prelude::Context, futures::future::{join_all, join},
+    prelude::Context,
 };
 use std::io;
 
@@ -30,7 +31,10 @@ pub async fn register_all(ctx: &Context) -> io::Result<()> {
 }
 
 async fn clear_dev(ctx: &Context, guild_id: &GuildId) {
-    let cmds = guild_id.get_application_commands(&ctx.http).await.unwrap_or(vec![]);
+    let cmds = guild_id
+        .get_application_commands(&ctx.http)
+        .await
+        .unwrap_or(vec![]);
     let mut jobs = vec![];
 
     for cmd in cmds {
@@ -43,7 +47,11 @@ async fn clear_dev(ctx: &Context, guild_id: &GuildId) {
 }
 
 async fn clear_global(ctx: &Context) {
-    let cmds = ctx.http.get_global_application_commands().await.unwrap_or(vec![]);
+    let cmds = ctx
+        .http
+        .get_global_application_commands()
+        .await
+        .unwrap_or(vec![]);
     let mut jobs = vec![];
 
     for cmd in cmds {
@@ -61,7 +69,6 @@ async fn register_to_dev(
     guild_id: &GuildId,
 ) -> std::io::Result<()> {
     join(clear_dev(ctx, guild_id), clear_global(ctx)).await;
-    
 
     let result = guild_id
         .set_application_commands(&ctx.http, |f| {

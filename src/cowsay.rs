@@ -1,7 +1,6 @@
 pub mod images;
-use charasay::{format_character, Chara::Builtin};
 use crate::types::Result;
-
+use charasay::{format_character, Chara::Builtin};
 
 pub fn cowsay(character: &str, msg: &str) -> Result<String> {
     let cow = Builtin(String::from(character));

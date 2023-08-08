@@ -2,11 +2,10 @@ mod bot;
 mod commands;
 mod config;
 mod cowsay;
-mod events;
 mod embeds;
+mod events;
 mod tmp;
 mod types;
-
 
 #[tokio::main]
 async fn main() {

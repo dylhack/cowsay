@@ -4,8 +4,7 @@ use crate::{
     types::{CommandResult, Response},
 };
 use serenity::{
-    model::prelude::application_command::ApplicationCommandInteraction,
-    prelude::Context,
+    model::prelude::application_command::ApplicationCommandInteraction, prelude::Context,
 };
 
 pub async fn respond(

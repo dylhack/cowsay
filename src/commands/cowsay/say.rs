@@ -1,7 +1,5 @@
-use crate::{
-    types::CommandResult,
-    commands::cowsay::internal::respond,
-};
+use crate::{commands::cowsay::internal::respond, types::CommandResult};
+use charasay::BUILTIN_CHARA;
 use serenity::{
     builder::CreateApplicationCommandOption,
     model::prelude::{
@@ -10,7 +8,6 @@ use serenity::{
     },
     prelude::Context,
 };
-use charasay::BUILTIN_CHARA;
 
 // 510 = Four lines of wrapped text
 // static MAX_LENGTH: u16 = 510;
@@ -27,10 +24,11 @@ pub fn register(grp: &mut CreateApplicationCommandOption) {
         opt
     });
     grp.create_sub_option(|opt| {
-        opt.name("character").description("Character to display.")
+        opt.name("character")
+            .description("Character to display.")
             .kind(CommandOptionType::String)
             .required(false);
-        
+
         for character in BUILTIN_CHARA {
             opt.add_string_choice(character, character);
         }
@@ -54,7 +52,7 @@ pub async fn handle(
     let mut chara = "cow";
     if let Some(chara_arg) = subcmd.options.get(1) {
         let chara_val = chara_arg.value.as_ref();
-        if let Some(chara_str)  = chara_val {
+        if let Some(chara_str) = chara_val {
             chara = chara_str.as_str().unwrap_or("cow");
         }
     }

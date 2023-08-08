@@ -1,10 +1,9 @@
 mod fortune;
-mod say;
 mod internal;
+mod say;
 use serenity::{
     builder::CreateApplicationCommand,
-    model::prelude::application_command::ApplicationCommandInteraction,
-    prelude::Context,
+    model::prelude::application_command::ApplicationCommandInteraction, prelude::Context,
 };
 
 use crate::types::CommandResult;
@@ -25,8 +24,8 @@ pub fn register() -> CreateApplicationCommand {
 }
 
 pub async fn handle(ctx: &Context, cmd: &ApplicationCommandInteraction) -> CommandResult {
-    let subcmd= cmd.data.options.get(0).ok_or("Subcommand not found")?;
-    
+    let subcmd = cmd.data.options.get(0).ok_or("Subcommand not found")?;
+
     match subcmd.name.as_str() {
         "fortune" => fortune::handle(ctx, cmd).await,
         "say" => say::handle(ctx, cmd, subcmd).await,

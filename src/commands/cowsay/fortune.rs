@@ -1,17 +1,16 @@
+use crate::{commands::cowsay::internal::respond, cowsay::get_fortune, types::CommandResult};
 use serenity::{
     builder::CreateApplicationCommandOption,
-    model::prelude::{application_command::ApplicationCommandInteraction, command::CommandOptionType},
+    model::prelude::{
+        application_command::ApplicationCommandInteraction, command::CommandOptionType,
+    },
     prelude::Context,
-};
-use crate::{
-    cowsay::get_fortune,
-    types::CommandResult,
-    commands::cowsay::internal::respond,
 };
 
 pub fn register(grp: &mut CreateApplicationCommandOption) {
     grp.kind(CommandOptionType::SubCommand);
-    grp.name("fortune").description("Let cowsay tell your fortune!");
+    grp.name("fortune")
+        .description("Let cowsay tell your fortune!");
 }
 
 pub async fn handle(ctx: &Context, cmd: &ApplicationCommandInteraction) -> CommandResult {

@@ -1,9 +1,5 @@
-use crate::{
-    config::get_bot_token,
-    events::Handler,
-};
+use crate::{config::get_bot_token, events::Handler};
 use serenity::{client::ClientBuilder, prelude::GatewayIntents};
-
 
 pub async fn start() {
     let token = get_bot_token();
