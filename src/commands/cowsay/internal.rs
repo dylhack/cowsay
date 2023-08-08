@@ -16,7 +16,7 @@ pub async fn respond(
 ) -> CommandResult {
     let sample = cowsay(character, text)?;
     let image = cowsay_to_image(&sample)?;
-    let file_path = get_path(&format!("{}.png", cmd.id))?;
+    let file_path = get_path(&format!("{}.webp", cmd.id))?;
 
     if let Err(_) = image.save(file_path.clone()) {
         return Response::err("Failed to save image.");
