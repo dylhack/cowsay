@@ -1,5 +1,9 @@
 <div align="middle" float="left">
 
+   <img alt="Ferris saying Cowsay for Discord!" src="docs/ferris.webp" />
+
+  <br>
+
  <a href="https://github.com/dylhack/cowsay-bot/actions/workflows/release.yml">
   <img alt="Release Status Badge" src="https://github.com/dylhack/cowsay-bot/actions/workflows/release.yml/badge.svg"/>
  </a>
