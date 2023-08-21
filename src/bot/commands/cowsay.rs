@@ -4,8 +4,9 @@ use serenity::{
     builder::CreateApplicationCommand,
     model::prelude::application_command::ApplicationCommandInteraction, prelude::Context,
 };
+
 use crate::{
-    cowsay::{cowsay, images::cowsay_to_image},
+    cowsay::{cowsay, cowsay_to_image},
     tmp::get_path,
     types::{CommandResult, Response},
 };

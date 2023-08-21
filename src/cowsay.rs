@@ -1,13 +1,11 @@
-pub mod images;
 use crate::types::Result;
+use cowparse::ImageBuilder;
 use charasay::{format_character, Chara::Builtin};
+use image::RgbaImage;
 
-// TODO(dylhack): The following characters are not supported because the 
-//                cowsay_bot::cowsay::images::chop function doesn't work 
-//                with colors greater than xterm / ansi 256
-pub const BUILTIN_CHARA: [&str; 20] = [
-    // "aya",
-    // "cirno",
+pub const BUILTIN_CHARA: [&str; 23] = [
+    "aya",
+    "cirno",
     "clefairy",
     "cow",
     "eevee",
@@ -24,7 +22,7 @@ pub const BUILTIN_CHARA: [&str; 20] = [
     "pikachu",
     "piplup",
     "psyduck",
-    // "remilia-scarlet",
+    "remilia-scarlet",
     "seaking",
     "togepi",
     "tux",
@@ -40,4 +38,15 @@ pub fn cowsay(character: &str, msg: &str) -> Result<String> {
     } else {
         Ok(result.unwrap())
     }
+}
+
+pub fn cowsay_to_image(cowsay: &str) -> Result<RgbaImage> {
+    let font = include_bytes!("../assets/font/JetBrainsMonoNerdFont-Regular.ttf").to_vec();
+    let bold_font = include_bytes!("../assets/font/JetBrainsMonoNerdFont-Bold.ttf").to_vec();
+    let image = ImageBuilder::from(cowsay)
+        .set_font(font)
+        .set_bubble_font(bold_font)
+        .build()?;
+
+    Ok(image)
 }
