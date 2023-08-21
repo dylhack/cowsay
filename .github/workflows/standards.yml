@@ -17,6 +17,4 @@ jobs:
     - name: Build
       run: cargo build --verbose
     - name: Test
-      run: cargo test
-    - name: Test - Cowparse
-      run: cd ./cowparse && cargo test
+      run: bash scripts/test.sh

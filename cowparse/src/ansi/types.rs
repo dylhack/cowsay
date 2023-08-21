@@ -48,25 +48,20 @@ impl Clone for ControlFunction {
     }
 }
 
-impl Display for ControlFunction {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        let mut result = format!("{};", self.escape);
-        let max = result.len() - 1;
-        self.params.iter().enumerate().for_each(|(i, param)| {
-            result.push_str(&format!("{}", param));
-            if i != max {
-                result.push(';');
-            }
-        });
-        write!(f, "{}", result)
-    }
-}
-
 impl Debug for ControlFunction {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("ControlFunction")
             .field("escape", &self.escape)
             .field("params", &self.params)
+            .finish()
+    }
+}
+
+impl Debug for ANSIChar {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("ANSIChar")
+            .field("control", &self.control)
+            .field("char", &self.char)
             .finish()
     }
 }
@@ -83,11 +78,16 @@ impl Display for ANSIChar {
     }
 }
 
-impl Debug for ANSIChar {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.debug_struct("ANSIChar")
-            .field("control", &self.control)
-            .field("char", &self.char)
-            .finish()
+impl Display for ControlFunction {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        let mut result = format!("{};", self.escape);
+        let max = result.len() - 1;
+        self.params.iter().enumerate().for_each(|(i, param)| {
+            result.push_str(&format!("{}", param));
+            if i != max {
+                result.push(';');
+            }
+        });
+        write!(f, "{}", result)
     }
 }
