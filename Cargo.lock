@@ -314,13 +314,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "cowparse"
+version = "0.1.0"
+dependencies = [
+ "ansi_colours",
+ "image",
+ "imageproc",
+ "rusttype",
+]
+
+[[package]]
 name = "cowsay-bot"
 version = "0.1.0"
 dependencies = [
  "ansi_colours",
  "charasay",
+ "cowparse",
  "image",
- "imageproc",
  "rand 0.8.5",
  "rusttype",
  "serenity",
@@ -746,9 +756,9 @@ dependencies = [
 
 [[package]]
 name = "image"
-version = "0.24.6"
+version = "0.24.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "527909aa81e20ac3a44803521443a765550f09b5130c2c2fa1ea59c2f8f50a3a"
+checksum = "6f3dfdbdd72063086ff443e297b61695500514b1e41095b6fb9a5ab48a70a711"
 dependencies = [
  "bytemuck",
  "byteorder",
@@ -994,9 +1004,9 @@ dependencies = [
 
 [[package]]
 name = "num-complex"
-version = "0.4.3"
+version = "0.4.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "02e0d21255c828d6f128a1e41534206671e8c3ea0c62f32291e808dc82cff17d"
+checksum = "1ba157ca0885411de85d6ca030ba7e2a83a28636056c7c699b07c8b6f7383214"
 dependencies = [
  "num-traits",
 ]
