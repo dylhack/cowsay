@@ -40,10 +40,12 @@ fn get_color(color_opt: &Option<(u8, u8, u8)>) -> Color {
 ///
 /// # Example
 /// ```
-/// use charasay::format_character;
+/// use charasay::{bubbles::BubbleType, Chara::Builtin, format_character};
+/// use cowparse::ImageBuilder;
 ///
-/// let font = include_bytes!("./MyFont-Regular.ttf").to_vec();
-/// let bold_font = include_bytes!("./MyFont-Bold.ttf").to_vec();
+/// // Set to your own font.
+/// let font = include_bytes!("../../test/fonts/JetBrainsMonoNerdFont-Regular.ttf").to_vec();
+/// let bold_font = include_bytes!("../../test/fonts/JetBrainsMonoNerdFont-Bold.ttf").to_vec();
 /// let cowsay = format_character("Hello world!", &Builtin(String::from("cow")), 80, BubbleType::Round).unwrap();
 /// let image = ImageBuilder::from(&cowsay)
 ///     .set_font(font)

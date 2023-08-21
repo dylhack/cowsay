@@ -95,7 +95,8 @@ pub fn parse_control(ctrl: &str, last_control: &ControlSequence) -> ControlSeque
 /// ```
 /// use cowparse::parse;
 ///
-/// parse("\x1B[38;2;197;108;59mHello World!\x1B[m\n");
+/// let result = parse("\x1B[38;2;197;108;59mHello World!\x1B[m\n");
+/// println!("{:?}", result);
 /// ```
 pub fn parse(text: &str) -> ANSIString {
     let mut result = Vec::new();
