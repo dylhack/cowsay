@@ -1,8 +1,8 @@
 use std::sync::Arc;
 
 use super::{
-    sgr, 
-    types::{ControlFunction, ControlSequence, ANSIChar, ANSIString},
+    sgr,
+    types::{ANSIChar, ANSIString, ControlFunction, ControlSequence},
 };
 
 const ESCAPE_START: u8 = 0x1B;
@@ -90,11 +90,11 @@ pub fn parse_control(ctrl: &str, last_control: &ControlSequence) -> ControlSeque
 }
 
 /// Parse a string with ANSI X3.64 escape sequences.
-/// 
+///
 /// # Examples
 /// ```
 /// use cowparse::parse;
-/// 
+///
 /// let result = parse("\x1B[38;2;197;108;59mHello World!\x1B[m\n");
 /// println!("{}", result);
 /// ```

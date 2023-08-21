@@ -3,10 +3,7 @@ type Fortunes = Vec<String>;
 
 macro_rules! fortune {
     ($file:expr) => {
-        include_bytes!(concat!(
-            "../assets/fortune/datfiles/",
-            $file
-        ))
+        include_bytes!(concat!("../assets/fortune/datfiles/", $file))
     };
 }
 

@@ -1,5 +1,5 @@
-use ansi_colours::rgb_from_ansi256;
 use super::{sgr, types::ANSIChar};
+use ansi_colours::rgb_from_ansi256;
 
 type Color = (u8, u8, u8);
 

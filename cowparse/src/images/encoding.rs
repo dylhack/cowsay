@@ -35,7 +35,7 @@ fn get_color(color_opt: &Option<(u8, u8, u8)>) -> Color {
 }
 
 /// ImageBuilder is a builder for creating an image from a cowsay string.
-/// 
+///
 ///  - It's recommended to use a bold font for the bubble font.
 ///
 /// # Example
@@ -50,7 +50,7 @@ fn get_color(color_opt: &Option<(u8, u8, u8)>) -> Color {
 ///     .set_bubble_font(bold_font)
 ///     .build()
 ///     .unwrap();
-/// 
+///
 /// // Make sure to install image with png feature flag enabled.
 /// image.save("./output.png").expect("Failed to save image.");
 /// ```

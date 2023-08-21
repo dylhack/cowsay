@@ -1,9 +1,10 @@
 use super::respond;
-use crate::{fortune::get_fortune, types::CommandResult, cowsay::BUILTIN_CHARA};
+use crate::{cowsay::BUILTIN_CHARA, fortune::get_fortune, types::CommandResult};
 use serenity::{
     builder::CreateApplicationCommandOption,
     model::prelude::{
-        application_command::{ApplicationCommandInteraction, CommandDataOption}, command::CommandOptionType,
+        application_command::{ApplicationCommandInteraction, CommandDataOption},
+        command::CommandOptionType,
     },
     prelude::Context,
 };
@@ -26,7 +27,11 @@ pub fn register(grp: &mut CreateApplicationCommandOption) {
         });
 }
 
-pub async fn handle(ctx: &Context, cmd: &ApplicationCommandInteraction, subcmd: &CommandDataOption) -> CommandResult {
+pub async fn handle(
+    ctx: &Context,
+    cmd: &ApplicationCommandInteraction,
+    subcmd: &CommandDataOption,
+) -> CommandResult {
     let fortune = get_fortune();
     let mut chara = "cow";
     if let Some(chara_arg) = subcmd.options.get(0) {

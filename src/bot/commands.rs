@@ -1,8 +1,8 @@
 mod cowsay;
 
 use crate::{
-    config::get_dev_server,
     bot::embeds::create_error_embed,
+    config::get_dev_server,
     types::{CommandResult, Response},
 };
 use serenity::{

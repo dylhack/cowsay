@@ -1,6 +1,6 @@
 use crate::types::Result;
-use cowparse::ImageBuilder;
 use charasay::{format_character, Chara::Builtin};
+use cowparse::ImageBuilder;
 use image::RgbaImage;
 
 pub const BUILTIN_CHARA: [&str; 23] = [

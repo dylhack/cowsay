@@ -11,7 +11,6 @@ use crate::{
     types::{CommandResult, Response},
 };
 
-
 async fn respond(
     ctx: &Context,
     cmd: &ApplicationCommandInteraction,
