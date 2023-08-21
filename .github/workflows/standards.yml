@@ -17,4 +17,4 @@ jobs:
     - name: Build
       run: cargo build --verbose
     - name: Test
-      run: cargo test
+      run: bash scripts/test.sh

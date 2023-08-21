@@ -8,12 +8,15 @@ edition = "2021"
 [dependencies]
 ansi_colours = "1.2.2"
 charasay = "3.0.1"
-imageproc = "0.23.0"
 rand = "0.8.5"
 rusttype = "0.9.3"
 
+[dependencies.cowparse]
+path = "./cowparse"
+features = ["images"]
+
 [dependencies.image]
-version = "0.24.6"
+version = "0.24.7"
 default-features = false
 features = ["webp", "webp-encoder"]
 

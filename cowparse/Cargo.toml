@@ -1,0 +1,31 @@
+[package]
+name = "cowparse"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+homepage = "https://cowsay.app"
+repository = "https://github.com/dylhack/cowparse"
+description = "A library for parsing cowsay files."
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[dependencies]
+ansi_colours = "1.2.2"
+imageproc = { version = "0.23.0", optional = true }
+rusttype = { version = "0.9.3", optional = true }
+
+[dependencies.image]
+version = "0.24.7"
+optional = true
+default-features = false
+
+[dev-dependencies]
+charasay = "3.0.1"
+
+[dev-dependencies.image]
+version = "0.24.7"
+default-features = false
+features = ["png"]
+
+[features]
+default = []
+images = ["image", "imageproc", "rusttype"]
