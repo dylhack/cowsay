@@ -1,6 +1,9 @@
 <div align="middle" float="left">
 
+
+ <a href="https://discord.com/api/oauth2/authorize?client_id=1135038990081347605&permissions=0&scope=applications.commands%20bot">
    <img alt="Ferris saying Cowsay for Discord!" src="docs/readme-ferris.webp" />
+ </a>
 
   <br>
 
