@@ -1,5 +1,7 @@
+use crate::proto::cowfiles::CowfileDescriptor;
+
 use super::{config::get_database_url, proto::cowfiles::Cowfile};
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 
 #[allow(dead_code)]
@@ -14,6 +16,15 @@ struct DbCowfile {
     pub created_at: chrono::NaiveDateTime,
     pub updated_at: chrono::NaiveDateTime,
     pub deleted_at: Option<chrono::NaiveDateTime>,
+}
+#[allow(dead_code)]
+#[derive(sqlx::FromRow)]
+struct DbCowfileDescriptor {
+    pub id: String,
+    pub name: String,
+    pub uploader_id: String,
+    pub author: Option<String>,
+    pub server_id: Option<String>,
 }
 
 #[allow(dead_code)]
@@ -47,6 +58,22 @@ fn map_db_cowfile(row: &DbCowfile) -> Cowfile {
         name: row.name.clone(),
         data: row.data.clone(),
         server_id: row.server_id.clone(),
+        uploader_id: row.uploader_id.clone(),
+        author,
+    }
+}
+
+fn map_db_cowfile_descriptor(row: &DbCowfileDescriptor) -> CowfileDescriptor {
+    let author = if let Some(author) = &row.author {
+        author.clone()
+    } else {
+        "Unknown".to_string()
+    };
+    CowfileDescriptor {
+        id: row.id.clone(),
+        name: row.name.clone(),
+        server_id: row.server_id.clone(),
+        uploader_id: row.uploader_id.clone(),
         author,
     }
 }
@@ -71,28 +98,25 @@ pub async fn init() -> Pool<Postgres> {
 pub async fn get_cowfiles(
     pool: &Pool<Postgres>,
     server_id: Option<String>,
-) -> Result<Vec<Cowfile>> {
+) -> Result<Vec<CowfileDescriptor>> {
     let server = if let Some(id) = &server_id {
         get_server_id(&pool, id).await?
     } else {
         "0".to_string()
     };
     let result = sqlx::query_as!(
-        DbCowfile,
+        DbCowfileDescriptor,
         "
 SELECT DISTINCT
-  cowsay.cowfiles.*
+  id,
+  name,
+  uploader_id,
+  author,
+  server_id
 FROM
   cowsay.cowfiles
 WHERE
-  server_id = (
-    SELECT
-      cowsay.servers.id
-    FROM
-      cowsay.servers
-    WHERE
-      cowsay.servers.discord_id = $1
-  )
+  server_id = $1
   OR cowsay.cowfiles.server_id IS NULL
 ORDER BY
   cowsay.cowfiles.server_id;
@@ -105,7 +129,7 @@ ORDER BY
     let mut cowfiles = Vec::new();
 
     for row in result {
-        cowfiles.push(map_db_cowfile(&row));
+        cowfiles.push(map_db_cowfile_descriptor(&row));
     }
 
     Ok(cowfiles)
@@ -127,7 +151,8 @@ WHERE
         id
     )
     .fetch_one(pool)
-    .await?;
+    .await
+    .map_err(|why| anyhow!("Failed to get cowfile \"{}\".\n{}", id, why))?;
 
     Ok(map_db_cowfile(&row))
 }
@@ -160,32 +185,42 @@ WHERE
         server_id
     )
     .fetch_one(pool)
-    .await?;
+    .await
+    .map_err(|why| anyhow!("Failed to get cowfiles.\n{}", why))?;
 
     Ok(map_db_cowfile(&row))
 }
 
 pub async fn get_server_id(pool: &Pool<Postgres>, discord_id: &str) -> Result<String> {
-    sqlx::query!("INSERT INTO cowsay.servers (id, discord_id) VALUES (DEFAULT, $1) ON CONFLICT DO NOTHING RETURNING id;", discord_id).fetch_one(pool).await?;
+    if let Ok(server) = sqlx::query!("INSERT INTO cowsay.servers (id, discord_id) VALUES (DEFAULT, $1) ON CONFLICT DO NOTHING RETURNING *;", discord_id).fetch_one(pool).await {
+      return Ok(server.id);
+    }
+
     let row = sqlx::query_as!(
         DbServer,
         "SELECT * FROM cowsay.servers WHERE discord_id = $1;",
         discord_id
     )
     .fetch_one(pool)
-    .await?;
+    .await
+    .map_err(|why| anyhow!("Failed to get server \"{}\".\n{}", discord_id, why))?;
+
     Ok(row.id)
 }
 
 pub async fn get_user_id(pool: &Pool<Postgres>, discord_id: &str) -> Result<String> {
-    sqlx::query!("INSERT INTO cowsay.users (id, discord_id) VALUES (DEFAULT, $1) ON CONFLICT DO NOTHING RETURNING id;", discord_id).fetch_one(pool).await?;
+    if let Ok(user) = sqlx::query_as!(DbUser, "INSERT INTO cowsay.users (id, discord_id) VALUES (DEFAULT, $1) ON CONFLICT DO NOTHING RETURNING *;", discord_id).fetch_one(pool).await {
+        return Ok(user.id);
+    }
+
     let row = sqlx::query_as!(
         DbUser,
         "SELECT * FROM cowsay.users WHERE discord_id = $1;",
         discord_id
     )
     .fetch_one(pool)
-    .await?;
+    .await
+    .map_err(|why| anyhow!("Failed to get user \"{}\".\n{}", discord_id, why))?;
     Ok(row.id)
 }
 

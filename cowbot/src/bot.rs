@@ -1,7 +1,6 @@
 mod commands;
 mod embeds;
 mod events;
-
 use crate::config::get_bot_token;
 use events::Handler;
 use serenity::{client::ClientBuilder, prelude::GatewayIntents};

@@ -11,14 +11,17 @@ use serenity::{
     futures::future::{join, join_all},
     model::{
         id::GuildId,
-        prelude::{application_command::ApplicationCommandInteraction, command::Command},
+        prelude::{
+            application_command::ApplicationCommandInteraction,
+            autocomplete::AutocompleteInteraction, command::Command,
+        },
     },
     prelude::Context as SerenityContext,
 };
 use std::io;
 
 pub async fn register_all(ctx: &SerenityContext) -> io::Result<()> {
-    let cmds = vec![cowsay::register().await];
+    let cmds = vec![cowsay::register()];
     let dev_server = get_dev_server();
 
     if let Some(guild_id) = dev_server {
@@ -122,6 +125,17 @@ pub async fn handle(ctx: &SerenityContext, cmd: &ApplicationCommandInteraction) 
     };
 
     respond(ctx, cmd, &result).await;
+}
+
+pub async fn handle_autocomplete(ctx: &SerenityContext, auto: &AutocompleteInteraction) {
+    let result = match auto.data.name.as_str() {
+        "cowsay" => cowsay::autocomplete(ctx, auto).await,
+        _ => Err(anyhow!("Command not found `{}`", auto.data.name)),
+    };
+
+    if let Err(why) = result {
+        println!("Failed to create autocomplete response: {:?}", why);
+    }
 }
 
 async fn respond(

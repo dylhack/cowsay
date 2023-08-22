@@ -31,6 +31,7 @@ impl CowfilesManager for CowManager {
         request: Request<SaveCowfileRequest>,
     ) -> Result<Response<Cowfile>, Status> {
         let msg: &SaveCowfileRequest = request.get_ref();
+        println!("{:?}", request);
         match database::save_cowfile(
             &self.pool,
             &msg.name,
@@ -51,6 +52,7 @@ impl CowfilesManager for CowManager {
         request: Request<GetCowfilesRequest>,
     ) -> Result<Response<Cowfiles>, Status> {
         let msg = request.get_ref();
+        println!("{:?}", request);
         match database::get_cowfiles(&self.pool, msg.server_id.clone()).await {
             Ok(reply) => Ok(Response::new(Cowfiles { cowfiles: reply })),
             Err(msg) => Err(Status::internal(msg.to_string())),
@@ -62,6 +64,7 @@ impl CowfilesManager for CowManager {
         request: Request<GetCowfileRequest>,
     ) -> Result<Response<Cowfile>, Status> {
         let msg = request.get_ref();
+        println!("{:?}", request);
         match database::get_cowfile(&self.pool, &msg.id).await {
             Ok(reply) => Ok(Response::new(reply)),
             Err(msg) => Err(Status::internal(msg.to_string())),
