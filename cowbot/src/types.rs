@@ -1,6 +1,6 @@
 #![allow(dead_code)]
+use anyhow::{anyhow, Result};
 
-pub type Result<T> = std::result::Result<T, String>;
 pub type CommandResult = Result<Response>;
 
 pub enum Response {
@@ -32,6 +32,6 @@ impl Response {
     }
 
     pub fn err<T: ToString>(msg: T) -> Result<Self> {
-        Err(msg.to_string())
+        Err(anyhow!("{}", msg.to_string()))
     }
 }

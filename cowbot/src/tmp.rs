@@ -1,8 +1,9 @@
-use crate::types::Result;
 use std::{
     fmt::Display,
     fs::{create_dir, read_dir},
 };
+
+use anyhow::{anyhow, Result};
 
 const ROOT: &str = "./tmp";
 
@@ -20,7 +21,7 @@ fn exists() -> bool {
 pub fn get_path<T: Display>(file_name: &T) -> Result<String> {
     if !exists() {
         if let Err(why) = init() {
-            return Err(format!("Failed to create root dir {}", why));
+            return Err(anyhow!("Failed to create root dir {}", why));
         }
     }
 

@@ -6,6 +6,7 @@ package cowfiles;
 service CowfilesManager {
   rpc SaveCowfile (SaveCowfileRequest) returns (Cowfile) {};
   rpc GetCowfiles (GetCowfilesRequest) returns (Cowfiles);
+  rpc GetCowfile (GetCowfileRequest) returns (Cowfile);
 }
 
 message SaveCowfileRequest {
@@ -19,6 +20,10 @@ message SaveCowfileRequest {
 
 message GetCowfilesRequest {
     optional string server_id = 1;
+}
+
+message GetCowfileRequest {
+    string id = 1;
 }
 
 message Cowfile {

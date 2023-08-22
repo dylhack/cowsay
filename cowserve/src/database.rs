@@ -113,8 +113,32 @@ ORDER BY
 
 /// Get a cowfile by name.
 /// - server_id is Discord server ID
-pub async fn get_cowfile(pool: &Pool<Postgres>, name: &str, server_id: &str) -> Option<Cowfile> {
-    let result = sqlx::query_as!(
+pub async fn get_cowfile(pool: &Pool<Postgres>, id: &str) -> Result<Cowfile> {
+    let row = sqlx::query_as!(
+        DbCowfile,
+        "
+SELECT
+  cowsay.cowfiles.*
+FROM
+  cowsay.cowfiles
+WHERE
+  id = $1;
+",
+        id
+    )
+    .fetch_one(pool)
+    .await?;
+
+    Ok(map_db_cowfile(&row))
+}
+/// Get a cowfile by name.
+/// - server_id is Discord server ID
+pub async fn get_cowfile_by_name(
+    pool: &Pool<Postgres>,
+    name: &str,
+    server_id: &str,
+) -> Result<Cowfile> {
+    let row = sqlx::query_as!(
         DbCowfile,
         "
 SELECT
@@ -136,13 +160,9 @@ WHERE
         server_id
     )
     .fetch_one(pool)
-    .await;
+    .await?;
 
-    if let Ok(row) = &result {
-        Some(map_db_cowfile(row))
-    } else {
-        None
-    }
+    Ok(map_db_cowfile(&row))
 }
 
 pub async fn get_server_id(pool: &Pool<Postgres>, discord_id: &str) -> Result<String> {
@@ -184,7 +204,7 @@ pub async fn save_cowfile(
     let user = get_user_id(pool, uploader_id).await?;
     let default_author = "Unknown".to_string();
 
-    if let Some(_) = get_cowfile(pool, name, server_id).await {
+    if let Ok(_) = get_cowfile_by_name(pool, name, server_id).await {
         return Err(anyhow::anyhow!("Cowfile already exists."));
     }
 

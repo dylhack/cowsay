@@ -5,6 +5,7 @@ use crate::{
     config::get_dev_server,
     types::{CommandResult, Response},
 };
+use anyhow::anyhow;
 use serenity::{
     builder::CreateApplicationCommand,
     futures::future::{join, join_all},
@@ -12,13 +13,12 @@ use serenity::{
         id::GuildId,
         prelude::{application_command::ApplicationCommandInteraction, command::Command},
     },
+    prelude::Context as SerenityContext,
 };
 use std::io;
 
-use super::Context;
-
-pub async fn register_all(ctx: &Context) -> io::Result<()> {
-    let cmds = vec![cowsay::register()];
+pub async fn register_all(ctx: &SerenityContext) -> io::Result<()> {
+    let cmds = vec![cowsay::register().await];
     let dev_server = get_dev_server();
 
     if let Some(guild_id) = dev_server {
@@ -31,15 +31,15 @@ pub async fn register_all(ctx: &Context) -> io::Result<()> {
     Ok(())
 }
 
-async fn clear_dev(ctx: &Context, guild_id: &GuildId) {
+async fn clear_dev(ctx: &SerenityContext, guild_id: &GuildId) {
     let cmds = guild_id
-        .get_application_commands(&ctx.ctx.http)
+        .get_application_commands(&ctx.http)
         .await
         .unwrap_or(vec![]);
     let mut jobs = vec![];
 
     for cmd in cmds {
-        let job = guild_id.delete_application_command(&ctx.ctx.http, cmd.id);
+        let job = guild_id.delete_application_command(&ctx.http, cmd.id);
         jobs.push(job);
     }
 
@@ -47,9 +47,8 @@ async fn clear_dev(ctx: &Context, guild_id: &GuildId) {
     join_all(jobs).await;
 }
 
-async fn clear_global(ctx: &Context) {
+async fn clear_global(ctx: &SerenityContext) {
     let cmds = ctx
-        .ctx
         .http
         .get_global_application_commands()
         .await
@@ -57,7 +56,7 @@ async fn clear_global(ctx: &Context) {
     let mut jobs = vec![];
 
     for cmd in cmds {
-        let job = ctx.ctx.http.delete_global_application_command(cmd.id.0);
+        let job = ctx.http.delete_global_application_command(cmd.id.0);
         jobs.push(job);
     }
 
@@ -66,14 +65,14 @@ async fn clear_global(ctx: &Context) {
 }
 
 async fn register_to_dev(
-    ctx: &Context,
+    ctx: &SerenityContext,
     cmds: Vec<CreateApplicationCommand>,
     guild_id: &GuildId,
 ) -> std::io::Result<()> {
     join(clear_dev(ctx, guild_id), clear_global(ctx)).await;
 
     let result = guild_id
-        .set_application_commands(&ctx.ctx.http, |f| {
+        .set_application_commands(&ctx.http, |f| {
             for cmd in cmds {
                 f.add_application_command(cmd);
             }
@@ -92,10 +91,10 @@ async fn register_to_dev(
 }
 
 async fn register_to_global(
-    ctx: &Context,
+    ctx: &SerenityContext,
     cmds: Vec<CreateApplicationCommand>,
 ) -> std::io::Result<()> {
-    let result = Command::set_global_application_commands(&ctx.ctx.http, |f| {
+    let result = Command::set_global_application_commands(&ctx.http, |f| {
         for cmd in cmds {
             f.add_application_command(cmd);
         }
@@ -113,19 +112,23 @@ async fn register_to_global(
     Ok(())
 }
 
-pub async fn handle(ctx: &Context, cmd: &ApplicationCommandInteraction) {
+pub async fn handle(ctx: &SerenityContext, cmd: &ApplicationCommandInteraction) {
     ///////////////////////////////////////////////////////////////////////////
     // Command Handler                                                       //
     ///////////////////////////////////////////////////////////////////////////
     let result = match cmd.data.name.as_str() {
         "cowsay" => cowsay::handle(ctx, cmd).await,
-        _ => Err(format!("Command not found `{}`", cmd.data.name)),
+        _ => Err(anyhow!("Command not found `{}`", cmd.data.name)),
     };
 
     respond(ctx, cmd, &result).await;
 }
 
-async fn respond(ctx: &Context, cmd: &ApplicationCommandInteraction, result: &CommandResult) {
+async fn respond(
+    ctx: &SerenityContext,
+    cmd: &ApplicationCommandInteraction,
+    result: &CommandResult,
+) {
     const DEFAULT_EPHEMERAL: bool = true;
 
     if let Ok(resp) = result {
@@ -135,11 +138,11 @@ async fn respond(ctx: &Context, cmd: &ApplicationCommandInteraction, result: &Co
     }
 
     let response = cmd
-        .create_interaction_response(&ctx.ctx.http, |f| {
+        .create_interaction_response(&ctx.http, |f| {
             f.interaction_response_data(|f| {
                 match result {
                     Err(why) => {
-                        let embed = create_error_embed(why);
+                        let embed = create_error_embed(&why.to_string());
                         f.add_embed(embed);
                         f.ephemeral(DEFAULT_EPHEMERAL);
                         // TODO(dylhack): so it worky

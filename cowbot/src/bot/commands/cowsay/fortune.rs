@@ -1,14 +1,15 @@
 use super::respond;
-use crate::{bot::Context, cowsay::BUILTIN_CHARA, fortune::get_fortune, types::CommandResult};
+use crate::{client::cowfiles::Cowfile, fortune::get_fortune, types::CommandResult};
 use serenity::{
     builder::CreateApplicationCommandOption,
     model::prelude::{
         application_command::{ApplicationCommandInteraction, CommandDataOption},
         command::CommandOptionType,
     },
+    prelude::Context as SerenityContext,
 };
 
-pub fn register(grp: &mut CreateApplicationCommandOption) {
+pub fn register(cowfiles: &Vec<Cowfile>, grp: &mut CreateApplicationCommandOption) {
     grp.kind(CommandOptionType::SubCommand);
     grp.name("fortune")
         .description("Let cowsay tell your fortune!")
@@ -18,8 +19,8 @@ pub fn register(grp: &mut CreateApplicationCommandOption) {
                 .kind(CommandOptionType::String)
                 .required(false);
 
-            for character in BUILTIN_CHARA {
-                opt.add_string_choice(character, character);
+            for character in cowfiles {
+                opt.add_string_choice(character.name.clone(), character.id.clone());
             }
 
             opt
@@ -27,18 +28,16 @@ pub fn register(grp: &mut CreateApplicationCommandOption) {
 }
 
 pub async fn handle(
-    ctx: &Context,
+    ctx: &SerenityContext,
     cmd: &ApplicationCommandInteraction,
     subcmd: &CommandDataOption,
 ) -> CommandResult {
     let fortune = get_fortune();
-    let mut chara = "cow";
-    if let Some(chara_arg) = subcmd.options.get(0) {
-        let chara_val = chara_arg.value.as_ref();
-        if let Some(chara_str) = chara_val {
-            chara = chara_str.as_str().unwrap_or("cow");
-        }
-    }
+    let chara = subcmd
+        .options
+        .get(0)
+        .and_then(|opt| opt.value.as_ref())
+        .and_then(|val| val.as_str());
 
-    respond(ctx, cmd, chara, &fortune).await
+    respond(ctx, cmd, &chara, &fortune).await
 }

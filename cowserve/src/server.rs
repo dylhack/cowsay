@@ -5,7 +5,7 @@ use crate::{
     database,
     proto::cowfiles::{
         cowfiles_manager_server::{CowfilesManager, CowfilesManagerServer},
-        Cowfile, Cowfiles, GetCowfilesRequest, SaveCowfileRequest,
+        Cowfile, Cowfiles, GetCowfileRequest, GetCowfilesRequest, SaveCowfileRequest,
     },
 };
 use anyhow::Result;
@@ -53,6 +53,17 @@ impl CowfilesManager for CowManager {
         let msg = request.get_ref();
         match database::get_cowfiles(&self.pool, msg.server_id.clone()).await {
             Ok(reply) => Ok(Response::new(Cowfiles { cowfiles: reply })),
+            Err(msg) => Err(Status::internal(msg.to_string())),
+        }
+    }
+
+    async fn get_cowfile(
+        &self,
+        request: Request<GetCowfileRequest>,
+    ) -> Result<Response<Cowfile>, Status> {
+        let msg = request.get_ref();
+        match database::get_cowfile(&self.pool, &msg.id).await {
+            Ok(reply) => Ok(Response::new(reply)),
             Err(msg) => Err(Status::internal(msg.to_string())),
         }
     }

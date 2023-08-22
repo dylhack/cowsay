@@ -1,14 +1,13 @@
-use crate::types::Result;
-use charasay::{format_character, Chara::File};
+use anyhow::{anyhow, Result};
+use charasay::{format_character, Chara};
 use cowparse::ImageBuilder;
 use image::RgbaImage;
 
-pub fn cowsay(character: &str, msg: &str) -> Result<String> {
-    let cow = Builtin(String::from(character));
-    let result = format_character(msg, &cow, 80, charasay::bubbles::BubbleType::Round);
+pub fn cowsay(cowfile: &Chara, msg: &str) -> Result<String> {
+    let result = format_character(msg, &cowfile, 80, charasay::bubbles::BubbleType::Round);
 
     if let Err(why) = result {
-        Err(format!("Failed to create cowsay, {}", why))
+        Err(anyhow!("Failed to create cowsay, {}", why))
     } else {
         Ok(result.unwrap())
     }
@@ -20,7 +19,8 @@ pub fn cowsay_to_image(cowsay: &str) -> Result<RgbaImage> {
     let image = ImageBuilder::from(cowsay)
         .set_font(font)
         .set_bubble_font(bold_font)
-        .build()?;
+        .build()
+        .expect("Failed to create cowsay image. How did this happen?");
 
     Ok(image)
 }
