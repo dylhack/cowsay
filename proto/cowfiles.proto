@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package cowfiles;
+
+// The greeting service definition.
+service CowfilesManager {
+  rpc SaveCowfile (SaveCowfileRequest) returns (Cowfile) {};
+  rpc GetCowfiles (GetCowfilesRequest) returns (Cowfiles);
+  rpc GetCowfile (GetCowfileRequest) returns (Cowfile);
+}
+
+message SaveCowfileRequest {
+    string server_id = 1;
+    string name = 2;
+    string uploader_id = 3;
+    optional string author = 4;
+    // Base64 encoded cowfile
+    string data = 5;
+}
+
+message GetCowfilesRequest {
+    optional string server_id = 1;
+}
+
+message GetCowfileRequest {
+    string id = 1;
+}
+
+message Cowfile {
+    string id = 1;
+    optional string server_id = 2;
+    string name = 3;
+    // Base64 encoded cowfile
+    string author = 4;
+    string uploader_id = 5;
+    string data = 6;
+}
+
+message CowfileDescriptor {
+    string id = 1;
+    optional string server_id = 2;
+    string name = 3;
+    string author = 4;
+    string uploader_id = 5;
+}
+
+message Cowfiles {
+    repeated CowfileDescriptor cowfiles = 1;
+}
