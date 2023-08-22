@@ -4,7 +4,6 @@ version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 ansi_colours = "1.2.2"
 charasay = "3.0.1"
@@ -12,7 +11,7 @@ rand = "0.8.5"
 rusttype = "0.9.3"
 
 [dependencies.cowparse]
-path = "./cowparse"
+path = "../cowparse"
 features = ["images"]
 
 [dependencies.image]
@@ -28,4 +27,3 @@ features = ["builder", "cache",  "client", "gateway", "http", "model", "rustls_b
 [dependencies.tokio]
 version = "1.29.1"
 features = ["macros", "rt-multi-thread"]
-

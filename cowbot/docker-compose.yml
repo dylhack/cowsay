@@ -1,0 +1,16 @@
+services:
+  cowsay:
+    build: .
+    environment:
+      - DEV_SERVER_ID=0
+      - BOT_TOKEN=TOKEN
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
+  postgres:
+    image: postgres:15.4
+    ports:
+     - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=postgres
+
+volumes:
+  postgres:
