@@ -1,12 +1,11 @@
 use super::respond;
-use crate::{cowsay::BUILTIN_CHARA, types::CommandResult};
+use crate::{bot::Context, cowsay::BUILTIN_CHARA, types::CommandResult};
 use serenity::{
     builder::CreateApplicationCommandOption,
     model::prelude::{
         application_command::{ApplicationCommandInteraction, CommandDataOption},
         command::CommandOptionType,
     },
-    prelude::Context,
 };
 
 pub fn register(grp: &mut CreateApplicationCommandOption) {
@@ -45,13 +44,13 @@ pub async fn handle(
         .value
         .as_ref()
         .ok_or("Text to say not found")?;
-    let mut chara = "cow";
-    if let Some(chara_arg) = subcmd.options.get(1) {
-        let chara_val = chara_arg.value.as_ref();
-        if let Some(chara_str) = chara_val {
-            chara = chara_str.as_str().unwrap_or("cow");
-        }
-    }
+    let chara = subcmd
+        .options
+        .get(1)
+        .and_then(|opt| opt.value.as_ref())
+        .and_then(|val| val.as_str())
+        .unwrap_or("cow");
+
     let say = text_arg.as_str().ok_or("Failed to parse text as string")?;
 
     respond(ctx, cmd, &chara, &say).await

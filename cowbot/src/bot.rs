@@ -1,14 +1,25 @@
 mod commands;
 mod embeds;
 mod events;
-use crate::config::get_bot_token;
-use events::Handler;
-use serenity::{client::ClientBuilder, prelude::GatewayIntents};
 
-pub async fn start() {
+use std::sync::Arc;
+
+use crate::{client::CowClient, config::get_bot_token};
+use events::Handler;
+use serenity::{
+    client::ClientBuilder,
+    prelude::{Context as SerenityContext, GatewayIntents},
+};
+
+pub struct Context {
+    pub client: Arc<CowClient>,
+    pub ctx: SerenityContext,
+}
+
+pub async fn start(client: Arc<CowClient>) {
     let token = get_bot_token();
     let mut client = ClientBuilder::new(token, GatewayIntents::empty())
-        .event_handler(Handler)
+        .event_handler(Handler { client })
         .await
         .expect("Failed to init bot.");
 

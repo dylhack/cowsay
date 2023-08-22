@@ -2,10 +2,11 @@ mod fortune;
 mod say;
 use serenity::{
     builder::CreateApplicationCommand,
-    model::prelude::application_command::ApplicationCommandInteraction, prelude::Context,
+    model::prelude::application_command::ApplicationCommandInteraction,
 };
 
 use crate::{
+    bot::Context,
     cowsay::{cowsay, cowsay_to_image},
     tmp::get_path,
     types::{CommandResult, Response},
@@ -26,7 +27,7 @@ async fn respond(
     }
 
     if let Err(why) = cmd
-        .create_interaction_response(&ctx.http, |f| {
+        .create_interaction_response(&ctx.ctx.http, |f| {
             f.interaction_response_data(|f| {
                 f.add_file(file_path.as_str());
                 f

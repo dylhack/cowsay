@@ -16,3 +16,7 @@ pub fn get_bot_token() -> String {
 pub fn get_contact_url() -> String {
     var("CONTACT_URL").unwrap_or(String::from("https://github.com/dylhack/cowsay-bot"))
 }
+
+pub fn get_server_url() -> String {
+    var("SERVER_URL").unwrap_or(String::from("5005"))
+}

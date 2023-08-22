@@ -12,9 +12,10 @@ use serenity::{
         id::GuildId,
         prelude::{application_command::ApplicationCommandInteraction, command::Command},
     },
-    prelude::Context,
 };
 use std::io;
+
+use super::Context;
 
 pub async fn register_all(ctx: &Context) -> io::Result<()> {
     let cmds = vec![cowsay::register()];
@@ -32,13 +33,13 @@ pub async fn register_all(ctx: &Context) -> io::Result<()> {
 
 async fn clear_dev(ctx: &Context, guild_id: &GuildId) {
     let cmds = guild_id
-        .get_application_commands(&ctx.http)
+        .get_application_commands(&ctx.ctx.http)
         .await
         .unwrap_or(vec![]);
     let mut jobs = vec![];
 
     for cmd in cmds {
-        let job = guild_id.delete_application_command(&ctx.http, cmd.id);
+        let job = guild_id.delete_application_command(&ctx.ctx.http, cmd.id);
         jobs.push(job);
     }
 
@@ -48,6 +49,7 @@ async fn clear_dev(ctx: &Context, guild_id: &GuildId) {
 
 async fn clear_global(ctx: &Context) {
     let cmds = ctx
+        .ctx
         .http
         .get_global_application_commands()
         .await
@@ -55,7 +57,7 @@ async fn clear_global(ctx: &Context) {
     let mut jobs = vec![];
 
     for cmd in cmds {
-        let job = ctx.http.delete_global_application_command(cmd.id.0);
+        let job = ctx.ctx.http.delete_global_application_command(cmd.id.0);
         jobs.push(job);
     }
 
@@ -71,7 +73,7 @@ async fn register_to_dev(
     join(clear_dev(ctx, guild_id), clear_global(ctx)).await;
 
     let result = guild_id
-        .set_application_commands(&ctx.http, |f| {
+        .set_application_commands(&ctx.ctx.http, |f| {
             for cmd in cmds {
                 f.add_application_command(cmd);
             }
@@ -93,7 +95,7 @@ async fn register_to_global(
     ctx: &Context,
     cmds: Vec<CreateApplicationCommand>,
 ) -> std::io::Result<()> {
-    let result = Command::set_global_application_commands(&ctx.http, |f| {
+    let result = Command::set_global_application_commands(&ctx.ctx.http, |f| {
         for cmd in cmds {
             f.add_application_command(cmd);
         }
@@ -133,7 +135,7 @@ async fn respond(ctx: &Context, cmd: &ApplicationCommandInteraction, result: &Co
     }
 
     let response = cmd
-        .create_interaction_response(&ctx.http, |f| {
+        .create_interaction_response(&ctx.ctx.http, |f| {
             f.interaction_response_data(|f| {
                 match result {
                     Err(why) => {

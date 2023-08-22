@@ -1,33 +1,7 @@
 use crate::types::Result;
-use charasay::{format_character, Chara::Builtin};
+use charasay::{format_character, Chara::File};
 use cowparse::ImageBuilder;
 use image::RgbaImage;
-
-pub const BUILTIN_CHARA: [&str; 23] = [
-    "aya",
-    "cirno",
-    "clefairy",
-    "cow",
-    "eevee",
-    "ferris",
-    "ferris1",
-    "flareon",
-    "goldeen",
-    "growlithe",
-    "kirby",
-    "kitten",
-    "mario",
-    "mew",
-    "nemo",
-    "pikachu",
-    "piplup",
-    "psyduck",
-    "remilia-scarlet",
-    "seaking",
-    "togepi",
-    "tux",
-    "wartortle",
-];
 
 pub fn cowsay(character: &str, msg: &str) -> Result<String> {
     let cow = Builtin(String::from(character));

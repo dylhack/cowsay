@@ -1,12 +1,11 @@
 use super::respond;
-use crate::{cowsay::BUILTIN_CHARA, fortune::get_fortune, types::CommandResult};
+use crate::{bot::Context, cowsay::BUILTIN_CHARA, fortune::get_fortune, types::CommandResult};
 use serenity::{
     builder::CreateApplicationCommandOption,
     model::prelude::{
         application_command::{ApplicationCommandInteraction, CommandDataOption},
         command::CommandOptionType,
     },
-    prelude::Context,
 };
 
 pub fn register(grp: &mut CreateApplicationCommandOption) {

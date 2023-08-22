@@ -1,6 +1,6 @@
 TEMP=$(mktemp -d)/fortune-mod
 DATS=$TEMP/fortune-mod/datfiles
-OUT=assets/fortune/datfiles
+OUT=cowbot/assets/fortune/datfiles
 git clone https://github.com/shlomif/fortune-mod $TEMP
 # clean it up
 rm -r $DATS/data $DATS/off $DATS/CMakeLists.txt
