@@ -1,4 +1,4 @@
-name: Publish Cowserve
+name: Publish Cowbot (Standalone)
 
 on:
   release: 
@@ -6,11 +6,11 @@ on:
 
 env:
   REGISTRY: ghcr.io/dylhack
-  IMAGE_NAME: cowserve
+  IMAGE_NAME: cowbot-standalone
 
 jobs:
   publish:
-    name: Publish Cowserve
+    name: Publish Cowbot
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -54,7 +54,7 @@ jobs:
         with:
           context: .
           push: true
-          target: cowserve-production
+          target: cowbot-standalone-production
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: ${{ matrix.platform }}

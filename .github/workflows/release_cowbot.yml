@@ -5,8 +5,8 @@ on:
     types: [published]
 
 env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: cowsay-bot
+  REGISTRY: ghcr.io/dylhack
+  IMAGE_NAME: cowbot
 
 jobs:
   publish:
