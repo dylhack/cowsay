@@ -1,12 +1,12 @@
-name: Publish Cowbot
+name: Publish Cowserve
 
 on:
   release: 
     types: [published]
 
 env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: cowsay-serve
+  REGISTRY: ghcr.io/dylhack
+  IMAGE_NAME: cowserve
 
 jobs:
   publish:
