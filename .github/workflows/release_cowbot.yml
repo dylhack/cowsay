@@ -52,7 +52,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./cowbot
+          context: .
           push: true
           target: cowbot-production
           tags: ${{ steps.meta.outputs.tags }}

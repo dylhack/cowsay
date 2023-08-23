@@ -52,7 +52,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./cowserve
+          context: .
           push: true
           target: cowserve-production
           tags: ${{ steps.meta.outputs.tags }}
