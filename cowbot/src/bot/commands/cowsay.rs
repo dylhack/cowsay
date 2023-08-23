@@ -88,7 +88,7 @@ pub async fn handle(ctx: &SerenityContext, cmd: &ApplicationCommandInteraction) 
         return Response::err(format!("Failed to send cowsay. {}", why));
     }
 
-    Response::success()
+    Response::ignore()
 }
 
 pub async fn autocomplete(ctx: &SerenityContext, auto: &AutocompleteInteraction) -> Result<()> {
