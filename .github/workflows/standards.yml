@@ -10,11 +10,37 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  coding_standards:
+  cowserve_standards:
+    name: "Cowserve Coding Standards"
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Build
+    - uses: actions-rust-lang/setup-rust-toolchain@v1
+    - uses: arduino/setup-protoc@v2
+    - name: Build Cowserve
+      working-directory: ./cowserve
       run: cargo build --verbose
-    - name: Test
-      run: bash scripts/test.sh
+
+  cowbot_standards:
+    name: "Cowbot Coding Standards"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions-rust-lang/setup-rust-toolchain@v1
+    - uses: arduino/setup-protoc@v2
+    - name: Build Cowbot
+      working-directory: ./cowbot
+      run: cargo build --verbose
+
+  cowparse_standards:
+    name: "Cowparse Coding Standards"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions-rust-lang/setup-rust-toolchain@v1
+    - name: Build Cowparse
+      working-directory: ./cowparse
+      run: cargo build --verbose
+    - name: Test Cowparse
+      working-directory: ./cowparse
+      run: cargo test --all-features

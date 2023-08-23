@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  cowbot:
+    build:
+      context: .
+      target: cowbot-production
+    env_file:
+      - .env
+    depends_on:
+      - cowserve
+  cowserve:
+    build:
+      context: .
+      target: cowserve-production
+    ports:
+      - 5411:5411
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:15.4
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=postgres
+
+volumes:
+  postgres:

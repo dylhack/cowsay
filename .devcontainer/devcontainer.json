@@ -1,10 +1,22 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/rust
 {
-	"name": "Cowsay Bot",
+	"name": "Cowsay",
 	"image": "mcr.microsoft.com/devcontainers/rust:1-1-bullseye",
+	"postCreateCommand": "bash ./cowserve/scripts/dev-init.sh",
 	"features": {
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
-		"ghcr.io/dhoeric/features/act:1": {}
+		"ghcr.io/dhoeric/features/act:1": {},
+		"ghcr.io/devcontainers-contrib/features/protoc-asdf:1": {
+			"version": "3.20.0"
+		}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"zxh404.vscode-proto3",
+				"github.vscode-github-actions"
+			]
+		}
 	}
 }

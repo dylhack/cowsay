@@ -1,0 +1,46 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\nSELECT DISTINCT\n  id,\n  name,\n  uploader_id,\n  author,\n  server_id\nFROM\n  cowsay.cowfiles\nWHERE\n  server_id = $1\n  OR cowsay.cowfiles.server_id IS NULL\nORDER BY\n  cowsay.cowfiles.server_id;\n",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "name",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "uploader_id",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "author",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 4,
+        "name": "server_id",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      true,
+      true
+    ]
+  },
+  "hash": "653fdb0a2d6f6c38cc07e04520db3236558ccb7e886706de88ee78423aba1e10"
+}
