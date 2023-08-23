@@ -9,6 +9,11 @@ FROM base AS cowbot-builder
 WORKDIR /opt/cowsay/cowbot
 RUN cargo build --release
 
+FROM base AS cowbot-standalone-builder
+
+WORKDIR /opt/cowsay/cowbot
+RUN cargo build --release --no-default-features
+
 FROM base AS cowserve-builder
 
 WORKDIR /opt/cowsay/cowserve
@@ -22,4 +27,9 @@ CMD cowserve
 FROM base AS cowbot-production
 
 COPY --from=cowbot-builder /opt/cowsay/cowbot/target/release/cowbot /usr/local/bin/cowbot
+CMD cowbot
+
+FROM base AS cowbot-standalone-production
+
+COPY --from=cowbot-standalone-builder /opt/cowsay/cowbot/target/release/cowbot /usr/local/bin/cowbot
 CMD cowbot

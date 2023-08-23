@@ -27,23 +27,5 @@
 Docker is recommended for setup.
 
 ```sh
-docker run -d -e BOT_TOKEN=token ghcr.io/dylhack/cowsay-bot:latest
-```
-
-## Without Docker
-
-You can use this setup also for development. If you plan on developing make 
-sure to set the `DEV_SERVER_ID` in the `.env`.
-
-**Requirements**
-
- - [Rust](https://www.rust-lang.org/)
- - [Proto Buffer](https://protobuf.dev/downloads/)
-
-```sh
-git clone https://github.com/dylhack/cowsay-bot
-cd cowsay-bot
-cp .env.example .env
-# Make sure to set the BOT_TOKEN before running
-cargo run
+docker run -d -e BOT_TOKEN=token ghcr.io/dylhack/cowsay-bot-standalone:latest
 ```
