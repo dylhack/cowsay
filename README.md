@@ -1,12 +1,12 @@
-<div float="left">
+<div align="center" float="left">
  <a href="https://discord.com/api/oauth2/authorize?client_id=1135038990081347605&permissions=0&scope=applications.commands%20bot">
    <img alt="Ferris saying Cowsay for Discord!" src="docs/readme-ferris.webp" />
  </a>
 
   <br>
 
- <a href="https://github.com/dylhack/cowsay-bot/actions/workflows/release.yml">
-  <img alt="Release Status Badge" src="https://github.com/dylhack/cowsay-bot/actions/workflows/release.yml/badge.svg"/>
+ <a href="https://github.com/dylhack/cowsay/actions/workflows/standards.yml">
+  <img alt="Coding Standards Badge" src="https://github.com/dylhack/cowsay/actions/workflows/standards.yml/badge.svg?branch=main"/>
  </a>
 
   <br>
