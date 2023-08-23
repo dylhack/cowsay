@@ -3,6 +3,10 @@ name = "cowbot"
 version = "0.1.0"
 edition = "2021"
 
+[features]
+cowserve = []
+default = ["cowserve"]
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [dependencies]
 ansi_colours = "1.2.2"
