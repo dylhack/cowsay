@@ -6,6 +6,8 @@ docs/
 *.gitignore
 *README.md
 */target/
+.env
+.env.example
 cowparse/Cargo.lock
 cowbot/tmp
 cowbot/.env

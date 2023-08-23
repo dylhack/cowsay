@@ -12,14 +12,14 @@ RUN cargo build --release
 FROM base AS cowserve-builder
 
 WORKDIR /opt/cowsay/cowserve
-RUN cargo build --release
+RUN unset DATABASE_URL && cargo build --release
 
-FROM alpine:latest AS cowserve-production
+FROM base AS cowserve-production
 
 COPY --from=cowserve-builder /opt/cowsay/cowserve/target/release/cowserve /usr/local/bin/cowserve
 CMD cowserve
 
-FROM alpine:latest AS cowbot-production
+FROM base AS cowbot-production
 
 COPY --from=cowbot-builder /opt/cowsay/cowbot/target/release/cowbot /usr/local/bin/cowbot
 CMD cowbot

@@ -5,9 +5,8 @@ services:
     build:
       context: .
       target: cowbot-production
-    environment:
-      - BOT_TOKEN=TOKEN
-      - SERVER_URL=http://localhost:5411
+    env_file:
+      - .env
     depends_on:
       - cowserve
   cowserve:
@@ -16,9 +15,8 @@ services:
       target: cowserve-production
     ports:
       - 5411:5411
-    environment:
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
-      - SERVER_PORT=5411
+    env_file:
+      - .env
     depends_on:
       - postgres
   postgres:
