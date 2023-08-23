@@ -17,6 +17,7 @@ struct DbCowfile {
     pub updated_at: chrono::NaiveDateTime,
     pub deleted_at: Option<chrono::NaiveDateTime>,
 }
+
 #[allow(dead_code)]
 #[derive(sqlx::FromRow)]
 struct DbCowfileDescriptor {
@@ -53,6 +54,7 @@ fn map_db_cowfile(row: &DbCowfile) -> Cowfile {
     } else {
         "Unknown".to_string()
     };
+
     Cowfile {
         id: row.id.clone(),
         name: row.name.clone(),
@@ -69,6 +71,7 @@ fn map_db_cowfile_descriptor(row: &DbCowfileDescriptor) -> CowfileDescriptor {
     } else {
         "Unknown".to_string()
     };
+
     CowfileDescriptor {
         id: row.id.clone(),
         name: row.name.clone(),

@@ -358,17 +358,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "cowparse"
-version = "0.1.0"
-dependencies = [
- "ansi_colours",
- "image",
- "imageproc",
- "rusttype",
-]
-
-[[package]]
-name = "cowsay-bot"
+name = "cowbot"
 version = "0.1.0"
 dependencies = [
  "ansi_colours",
@@ -384,6 +374,16 @@ dependencies = [
  "tokio",
  "tonic",
  "tonic-build",
+]
+
+[[package]]
+name = "cowparse"
+version = "0.1.0"
+dependencies = [
+ "ansi_colours",
+ "image",
+ "imageproc",
+ "rusttype",
 ]
 
 [[package]]

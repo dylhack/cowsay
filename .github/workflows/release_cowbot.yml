@@ -1,4 +1,4 @@
-name: Publish Release
+name: Publish Cowbot
 
 on:
   release: 
@@ -6,10 +6,11 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: cowsay-bot
 
 jobs:
   publish:
+    name: Publish Cowbot
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -51,8 +52,9 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: .
+          context: ./cowbot
           push: true
+          target: cowbot-production
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: ${{ matrix.platform }}

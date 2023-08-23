@@ -1,6 +1,4 @@
-<div align="middle" float="left">
-
-
+<div float="left">
  <a href="https://discord.com/api/oauth2/authorize?client_id=1135038990081347605&permissions=0&scope=applications.commands%20bot">
    <img alt="Ferris saying Cowsay for Discord!" src="docs/readme-ferris.webp" />
  </a>
@@ -40,6 +38,7 @@ sure to set the `DEV_SERVER_ID` in the `.env`.
 **Requirements**
 
  - [Rust](https://www.rust-lang.org/)
+ - [Proto Buffer](https://protobuf.dev/downloads/)
 
 ```sh
 git clone https://github.com/dylhack/cowsay-bot

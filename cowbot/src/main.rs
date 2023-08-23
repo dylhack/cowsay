@@ -8,8 +8,5 @@ mod types;
 
 #[tokio::main]
 async fn main() {
-    client::connect()
-        .await
-        .expect("Failed to connect to cowserve");
     bot::start().await;
 }

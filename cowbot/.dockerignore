@@ -1,8 +1,0 @@
-.env
-.env.example
-.devcontainer
-.gitignore
-README.md
-Dockerfile
-tmp
-docs
