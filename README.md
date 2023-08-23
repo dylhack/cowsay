@@ -27,5 +27,5 @@
 Docker is recommended for setup.
 
 ```sh
-docker run -d -e BOT_TOKEN=token ghcr.io/dylhack/cowsay-bot-standalone:latest
+docker run -d -e BOT_TOKEN=token ghcr.io/dylhack/cowbot-standalone:latest
 ```
