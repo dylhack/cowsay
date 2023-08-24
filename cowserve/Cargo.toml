@@ -14,7 +14,10 @@ tonic = "0.9.2"
 
 [dependencies.sqlx]
 version = "0.7.1"
-features = ["chrono", "uuid", "postgres", "runtime-tokio", "time"]
+features = ["chrono", "uuid", "postgres", "runtime-tokio", "time", "tls-native-tls"]
+# see https://github.com/launchbadge/sqlx/pull/2670
+git = "https://github.com/launchbadge/sqlx"
+rev = "487b89a4b6c67aacd7c15b0814a450801333153c"
 
 [dependencies.tokio]
 version = "1.29.1"
