@@ -24,7 +24,7 @@ export async function GET(_req: Request, { params }: Context) {
             return NextResponse.json({ error: err }, { status: 500 });
         }
 
-        if (err.details.includes('no rows returned')) {
+        if (err.details.includes('os error 2')) {
             return NextResponse.json({ message: 'Cowfile not found.' }, {
                 status: 404,
             });
