@@ -6,11 +6,12 @@ docs/
 *.gitignore
 *README.md
 */target/
-.env
-.env.example
+.env*
 cowparse/Cargo.lock
-cowbot/tmp
 cowbot/.env
 cowbot/.env.example
+cowserve/previews
 cowserve/.env
 cowserve/.env.example
+cowsite/.env
+cowsite/.env.example

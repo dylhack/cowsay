@@ -6,25 +6,44 @@ services:
       context: .
       target: cowbot-production
     env_file:
-      - .env
+      - .env.docker
     depends_on:
       - cowserve
   cowserve:
     build:
       context: .
       target: cowserve-production
+    restart: on-failure
     ports:
       - 5411:5411
     env_file:
-      - .env
+      - .env.docker
     depends_on:
       - postgres
+  cowserve_jobs:
+    build:
+      context: .
+      target: cowserve-production
+    command: cowserve consume
+    restart: on-failure
+    env_file:
+      - .env.docker
+    depends_on:
+      - queue
   postgres:
     image: postgres:15.4
     ports:
       - 5432:5432
     environment:
       - POSTGRES_PASSWORD=postgres
+  queue:
+    image: rabbitmq:3-management
+    ports:
+      - 5672:5672
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbit
+      - RABBITMQ_DEFAULT_PASS=rabbit
+      - RABBITMQ_DEFAULT_VHOST=cowsay
 
 volumes:
   postgres:
