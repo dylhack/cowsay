@@ -20,7 +20,6 @@ async fn consumer() -> Result<()> {
 async fn main() -> Result<()> {
     let args=  env::args();
 
-    // if args[last] = consume
     if args.last().unwrap_or("".to_string()) == "consume" {
         println!("Running as consumer");
         consumer().await?;

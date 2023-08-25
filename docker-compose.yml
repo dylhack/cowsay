@@ -5,10 +5,22 @@ services:
     build:
       context: .
       target: cowbot-production
+    environment:
+      - CONTACT_URL=https://discord.gg/rtyA7rEugx
+      - DEV_SERVER_ID=1138248283224027206
+      - SERVER_URL=http://cowserve:5411
     env_file:
       - .env.docker
     depends_on:
       - cowserve
+  cowsite:
+    build:
+      context: ./cowsite
+    restart: on-failure
+    environment:
+      - SERVER_URL=localhost:5411
+    ports:
+      - 3000:3000
   cowserve:
     build:
       context: .
@@ -16,8 +28,10 @@ services:
     restart: on-failure
     ports:
       - 5411:5411
-    env_file:
-      - .env.docker
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
+      - QUEUE_URL=amqp://rabbit:rabbit@queue:5672/cowsay
+      - SERVER_PORT=5411
     depends_on:
       - postgres
   cowserve_jobs:
@@ -26,8 +40,11 @@ services:
       target: cowserve-production
     command: cowserve consume
     restart: on-failure
-    env_file:
-      - .env.docker
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
+      - QUEUE_URL=amqp://rabbit:rabbit@queue:5672/cowsay
+      - SERVER_PORT=5411
+      - PREVIEWS_DIR=/tmp/previews
     depends_on:
       - queue
   postgres:
