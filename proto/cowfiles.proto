@@ -7,6 +7,7 @@ service CowfilesManager {
   rpc SaveCowfile (SaveCowfileRequest) returns (Cowfile) {};
   rpc GetCowfiles (GetCowfilesRequest) returns (Cowfiles);
   rpc GetCowfile (GetCowfileRequest) returns (Cowfile);
+  rpc GetPreview (GetPreviewRequest) returns (Preview);
 }
 
 message SaveCowfileRequest {
@@ -23,6 +24,10 @@ message GetCowfilesRequest {
 }
 
 message GetCowfileRequest {
+    string id = 1;
+}
+
+message GetPreviewRequest {
     string id = 1;
 }
 
@@ -46,4 +51,8 @@ message CowfileDescriptor {
 
 message Cowfiles {
     repeated CowfileDescriptor cowfiles = 1;
+}
+
+message Preview {
+    bytes data = 1;
 }

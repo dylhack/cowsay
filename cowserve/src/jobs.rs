@@ -8,7 +8,7 @@ pub async fn get_client() -> Result<Arc<Celery>> {
     let url = config::get_queue_url();
     let queue = celery::app!(
         broker = AMQPBroker { url },
-        tasks = [previews::task],
+        tasks = [previews::gen_previews],
         task_routes = [
             "*" => "celery",
         ],
@@ -21,7 +21,7 @@ pub async fn get_client() -> Result<Arc<Celery>> {
 
 pub async fn init_jobs(client: &Celery) {
 
-    if let Err(why) = client.send_task(previews::task::new()).await {
+    if let Err(why) = client.send_task(previews::gen_previews::new()).await {
         println!("Failed to send task: {:?}", why);
     }
 }

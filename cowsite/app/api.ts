@@ -1,5 +1,5 @@
 import { CowfilesManagerClient } from "@/api/cowfiles_grpc_pb";
-import { Cowfile, Cowfiles, GetCowfileRequest, GetCowfilesRequest, type CowfileDescriptor } from "@/api/cowfiles_pb";
+import { Cowfile, Cowfiles, GetCowfileRequest, GetCowfilesRequest, type CowfileDescriptor, Preview, GetPreviewRequest } from "@/api/cowfiles_pb";
 import { ServiceError, credentials } from "@grpc/grpc-js";
 
 
@@ -37,5 +37,15 @@ export async function getCowfile(id: string): Promise<Cowfile> {
         const req = new GetCowfileRequest();
         req.setId(id);
         client.getCowfile(req, callback(res, rej));
+    });
+}
+
+export async function getPreview(id: string): Promise<Preview> {
+    const client = getClient();
+
+    return new Promise((res, rej) => {
+        const req = new GetPreviewRequest();
+        req.setId(id);
+        client.getPreview(req, callback(res, rej));
     });
 }

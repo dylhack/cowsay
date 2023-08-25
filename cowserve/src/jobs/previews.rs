@@ -32,7 +32,7 @@ fn render(cowfile: &DbCowfile) -> Result<SavablePreview> {
 }
 
 #[celery::task]
-pub async fn task() -> TaskResult<()> {
+pub async fn gen_previews() -> TaskResult<()> {
     let pool = database::get_client().await.map_err(|err| TaskError::UnexpectedError(err.to_string()))?;
     let cowfiles = get_unresolved(&pool).await.map_err(|err| TaskError::UnexpectedError(err.to_string()))?;
     let mut job_set = JoinSet::<Result<()>>::new();

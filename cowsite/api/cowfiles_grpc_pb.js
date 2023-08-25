@@ -48,6 +48,28 @@ function deserialize_cowfiles_GetCowfilesRequest(buffer_arg) {
   return cowfiles_pb.GetCowfilesRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_cowfiles_GetPreviewRequest(arg) {
+  if (!(arg instanceof cowfiles_pb.GetPreviewRequest)) {
+    throw new Error('Expected argument of type cowfiles.GetPreviewRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_cowfiles_GetPreviewRequest(buffer_arg) {
+  return cowfiles_pb.GetPreviewRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_cowfiles_Preview(arg) {
+  if (!(arg instanceof cowfiles_pb.Preview)) {
+    throw new Error('Expected argument of type cowfiles.Preview');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_cowfiles_Preview(buffer_arg) {
+  return cowfiles_pb.Preview.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_cowfiles_SaveCowfileRequest(arg) {
   if (!(arg instanceof cowfiles_pb.SaveCowfileRequest)) {
     throw new Error('Expected argument of type cowfiles.SaveCowfileRequest');
@@ -94,6 +116,17 @@ var CowfilesManagerService = exports.CowfilesManagerService = {
     requestDeserialize: deserialize_cowfiles_GetCowfileRequest,
     responseSerialize: serialize_cowfiles_Cowfile,
     responseDeserialize: deserialize_cowfiles_Cowfile,
+  },
+  getPreview: {
+    path: '/cowfiles.CowfilesManager/GetPreview',
+    requestStream: false,
+    responseStream: false,
+    requestType: cowfiles_pb.GetPreviewRequest,
+    responseType: cowfiles_pb.Preview,
+    requestSerialize: serialize_cowfiles_GetPreviewRequest,
+    requestDeserialize: deserialize_cowfiles_GetPreviewRequest,
+    responseSerialize: serialize_cowfiles_Preview,
+    responseDeserialize: deserialize_cowfiles_Preview,
   },
 };
 

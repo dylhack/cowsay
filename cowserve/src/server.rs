@@ -5,8 +5,8 @@ use crate::{
     database::{get_cowfile, get_cowfiles, save_cowfile},
     proto::cowfiles::{
         cowfiles_manager_server::{CowfilesManager, CowfilesManagerServer},
-        Cowfile, Cowfiles, GetCowfileRequest, GetCowfilesRequest, SaveCowfileRequest,
-    },
+        Cowfile, Cowfiles, GetCowfileRequest, GetCowfilesRequest, SaveCowfileRequest, GetPreviewRequest, Preview
+    }, services::previews::get_preview,
 };
 use anyhow::Result;
 use async_trait::async_trait;
@@ -44,7 +44,7 @@ impl CowfilesManager for CowManager {
         .await
         {
             Ok(reply) => {
-                if let Err(why) = self.queue.send_task(crate::jobs::previews::task::new()).await {
+                if let Err(why) = self.queue.send_task(crate::jobs::previews::gen_previews::new()).await {
                     println!("Error sending task: {:?}", why);
                 }
                 Ok(Response::new(reply))
@@ -73,6 +73,15 @@ impl CowfilesManager for CowManager {
         println!("{:?}", request);
         match get_cowfile(&self.pool, &msg.id).await {
             Ok(reply) => Ok(Response::new(reply)),
+            Err(msg) => Err(Status::internal(msg.to_string())),
+        }
+    }
+
+    async fn get_preview(&self, request: Request<GetPreviewRequest>) -> Result<Response<Preview>, Status> {
+        let msg = request.get_ref();
+        println!("{:?}", request);
+        match get_preview(&msg.id).await {
+            Ok(data) => Ok(Response::new(Preview { data })),
             Err(msg) => Err(Status::internal(msg.to_string())),
         }
     }

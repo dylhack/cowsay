@@ -84,6 +84,26 @@ export namespace GetCowfileRequest {
     }
 }
 
+export class GetPreviewRequest extends jspb.Message { 
+    getId(): string;
+    setId(value: string): GetPreviewRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): GetPreviewRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: GetPreviewRequest): GetPreviewRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: GetPreviewRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetPreviewRequest;
+    static deserializeBinaryFromReader(message: GetPreviewRequest, reader: jspb.BinaryReader): GetPreviewRequest;
+}
+
+export namespace GetPreviewRequest {
+    export type AsObject = {
+        id: string,
+    }
+}
+
 export class Cowfile extends jspb.Message { 
     getId(): string;
     setId(value: string): Cowfile;
@@ -176,5 +196,27 @@ export class Cowfiles extends jspb.Message {
 export namespace Cowfiles {
     export type AsObject = {
         cowfilesList: Array<CowfileDescriptor.AsObject>,
+    }
+}
+
+export class Preview extends jspb.Message { 
+    getData(): Uint8Array | string;
+    getData_asU8(): Uint8Array;
+    getData_asB64(): string;
+    setData(value: Uint8Array | string): Preview;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Preview.AsObject;
+    static toObject(includeInstance: boolean, msg: Preview): Preview.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: Preview, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Preview;
+    static deserializeBinaryFromReader(message: Preview, reader: jspb.BinaryReader): Preview;
+}
+
+export namespace Preview {
+    export type AsObject = {
+        data: Uint8Array | string,
     }
 }

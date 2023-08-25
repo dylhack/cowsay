@@ -11,6 +11,7 @@ interface ICowfilesManagerService extends grpc.ServiceDefinition<grpc.UntypedSer
     saveCowfile: ICowfilesManagerService_ISaveCowfile;
     getCowfiles: ICowfilesManagerService_IGetCowfiles;
     getCowfile: ICowfilesManagerService_IGetCowfile;
+    getPreview: ICowfilesManagerService_IGetPreview;
 }
 
 interface ICowfilesManagerService_ISaveCowfile extends grpc.MethodDefinition<cowfiles_pb.SaveCowfileRequest, cowfiles_pb.Cowfile> {
@@ -40,6 +41,15 @@ interface ICowfilesManagerService_IGetCowfile extends grpc.MethodDefinition<cowf
     responseSerialize: grpc.serialize<cowfiles_pb.Cowfile>;
     responseDeserialize: grpc.deserialize<cowfiles_pb.Cowfile>;
 }
+interface ICowfilesManagerService_IGetPreview extends grpc.MethodDefinition<cowfiles_pb.GetPreviewRequest, cowfiles_pb.Preview> {
+    path: "/cowfiles.CowfilesManager/GetPreview";
+    requestStream: false;
+    responseStream: false;
+    requestSerialize: grpc.serialize<cowfiles_pb.GetPreviewRequest>;
+    requestDeserialize: grpc.deserialize<cowfiles_pb.GetPreviewRequest>;
+    responseSerialize: grpc.serialize<cowfiles_pb.Preview>;
+    responseDeserialize: grpc.deserialize<cowfiles_pb.Preview>;
+}
 
 export const CowfilesManagerService: ICowfilesManagerService;
 
@@ -47,6 +57,7 @@ export interface ICowfilesManagerServer extends grpc.UntypedServiceImplementatio
     saveCowfile: grpc.handleUnaryCall<cowfiles_pb.SaveCowfileRequest, cowfiles_pb.Cowfile>;
     getCowfiles: grpc.handleUnaryCall<cowfiles_pb.GetCowfilesRequest, cowfiles_pb.Cowfiles>;
     getCowfile: grpc.handleUnaryCall<cowfiles_pb.GetCowfileRequest, cowfiles_pb.Cowfile>;
+    getPreview: grpc.handleUnaryCall<cowfiles_pb.GetPreviewRequest, cowfiles_pb.Preview>;
 }
 
 export interface ICowfilesManagerClient {
@@ -59,6 +70,9 @@ export interface ICowfilesManagerClient {
     getCowfile(request: cowfiles_pb.GetCowfileRequest, callback: (error: grpc.ServiceError | null, response: cowfiles_pb.Cowfile) => void): grpc.ClientUnaryCall;
     getCowfile(request: cowfiles_pb.GetCowfileRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: cowfiles_pb.Cowfile) => void): grpc.ClientUnaryCall;
     getCowfile(request: cowfiles_pb.GetCowfileRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: cowfiles_pb.Cowfile) => void): grpc.ClientUnaryCall;
+    getPreview(request: cowfiles_pb.GetPreviewRequest, callback: (error: grpc.ServiceError | null, response: cowfiles_pb.Preview) => void): grpc.ClientUnaryCall;
+    getPreview(request: cowfiles_pb.GetPreviewRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: cowfiles_pb.Preview) => void): grpc.ClientUnaryCall;
+    getPreview(request: cowfiles_pb.GetPreviewRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: cowfiles_pb.Preview) => void): grpc.ClientUnaryCall;
 }
 
 export class CowfilesManagerClient extends grpc.Client implements ICowfilesManagerClient {
@@ -72,4 +86,7 @@ export class CowfilesManagerClient extends grpc.Client implements ICowfilesManag
     public getCowfile(request: cowfiles_pb.GetCowfileRequest, callback: (error: grpc.ServiceError | null, response: cowfiles_pb.Cowfile) => void): grpc.ClientUnaryCall;
     public getCowfile(request: cowfiles_pb.GetCowfileRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: cowfiles_pb.Cowfile) => void): grpc.ClientUnaryCall;
     public getCowfile(request: cowfiles_pb.GetCowfileRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: cowfiles_pb.Cowfile) => void): grpc.ClientUnaryCall;
+    public getPreview(request: cowfiles_pb.GetPreviewRequest, callback: (error: grpc.ServiceError | null, response: cowfiles_pb.Preview) => void): grpc.ClientUnaryCall;
+    public getPreview(request: cowfiles_pb.GetPreviewRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: cowfiles_pb.Preview) => void): grpc.ClientUnaryCall;
+    public getPreview(request: cowfiles_pb.GetPreviewRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: cowfiles_pb.Preview) => void): grpc.ClientUnaryCall;
 }
