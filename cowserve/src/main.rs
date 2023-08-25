@@ -1,12 +1,40 @@
-use std::sync::Arc;
-
 mod config;
 mod database;
+mod jobs;
 mod proto;
 mod server;
+mod services;
+use std::{sync::Arc, env};
+use anyhow::Result;
+
+
+async fn consumer() -> Result<()> {
+    let queue = jobs::get_client().await.unwrap();
+    queue.display_pretty().await;
+    queue.consume_from(&["celery"]).await?;
+
+    Ok(())
+}
 
 #[tokio::main]
-async fn main() {
-    let pool = Arc::new(database::init().await);
-    server::start_server(Arc::clone(&pool)).await;
+async fn main() -> Result<()> {
+    let args=  env::args();
+
+    // if args[last] = consume
+    if args.last().unwrap_or("".to_string()) == "consume" {
+        println!("Running as consumer");
+        consumer().await?;
+        return Ok(());
+    }
+
+    println!("Starting cowserve");
+    println!("Queue...");
+    let queue = jobs::get_client().await?;
+    println!("Database...");
+    let pool = Arc::new(database::init().await?);
+    println!("Initial jobs...");
+    jobs::init_jobs(queue.as_ref()).await;
+    server::start_server(Arc::clone(&pool), queue).await;
+
+    Ok(())
 }
