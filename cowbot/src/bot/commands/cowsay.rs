@@ -1,16 +1,18 @@
+use std::{borrow::Cow, io::Cursor};
+
 use crate::{
     client,
     cowsay::{cowsay, cowsay_to_image},
     fortune::get_fortune,
-    tmp::get_path,
     types::{CommandResult, Response},
 };
 use anyhow::Result;
 use charasay::Chara;
+use image::ImageFormat;
 use serenity::{
     builder::CreateApplicationCommand,
     model::prelude::{
-        application_command::ApplicationCommandInteraction, autocomplete::AutocompleteInteraction,
+        application_command::ApplicationCommandInteraction, autocomplete::AutocompleteInteraction, AttachmentType,
     },
     prelude::Context as SerenityContext,
 };
@@ -68,18 +70,14 @@ pub async fn handle(ctx: &SerenityContext, cmd: &ApplicationCommandInteraction) 
         message = get_fortune();
     }
 
-    let sample = cowsay(&chara, &message)?;
-    let image = cowsay_to_image(&sample)?;
-    let file_path = get_path(&format!("{}.webp", cmd.id))?;
-
-    if let Err(_) = image.save(file_path.clone()) {
-        return Response::err("Failed to save image.");
-    }
+    let mut bytes: Vec<u8> = Vec::new();
+    let image = cowsay_to_image(&cowsay(&chara, &message)?)?;
+    image.write_to(&mut Cursor::new(&mut bytes), ImageFormat::WebP)?;
 
     if let Err(why) = cmd
         .create_interaction_response(&ctx.http, |f| {
             f.interaction_response_data(|f| {
-                f.add_file(file_path.as_str());
+                f.add_file(AttachmentType::Bytes { data: Cow::Owned(bytes), filename: format!("{}.webp", chara_name) });
                 f
             })
         })

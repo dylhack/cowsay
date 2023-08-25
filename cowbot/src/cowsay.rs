@@ -14,8 +14,8 @@ pub fn cowsay(cowfile: &Chara, msg: &str) -> Result<String> {
 }
 
 pub fn cowsay_to_image(cowsay: &str) -> Result<RgbaImage> {
-    let font = include_bytes!("../assets/font/JetBrainsMonoNerdFont-Regular.ttf").to_vec();
-    let bold_font = include_bytes!("../assets/font/JetBrainsMonoNerdFont-Bold.ttf").to_vec();
+    let font = include_bytes!("../../assets/font/JetBrainsMonoNerdFont-Regular.ttf").to_vec();
+    let bold_font = include_bytes!("../../assets/font/JetBrainsMonoNerdFont-Bold.ttf").to_vec();
     let image = ImageBuilder::from(cowsay)
         .set_font(font)
         .set_bubble_font(bold_font)
