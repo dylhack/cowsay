@@ -1,35 +1,11 @@
-use anyhow::{Result, anyhow};
-use base64::Engine;
-use celery::prelude::*;
-use charasay::{format_character, Chara};
+use anyhow::Result;
+use celery::{task::TaskResult, prelude::TaskError};
 use tokio::task::JoinSet;
 use crate::{
-    database::{self, get_unresolved, cowfiles::DbCowfile, save_preview as save_preview_db}, 
-    services::previews::{SavablePreview, save_preview}
+    database::{self, get_unresolved},
+    services::previews,
 };
 
-const MESSAGE: &str = "Hello, world!";
-
-fn decode_base64(data: &String) -> Result<String> {
-    let decoded = base64::engine::general_purpose::STANDARD.decode(data)?;
-    let decoded = String::from_utf8(decoded)?;
-    Ok(decoded)
-}
-
-fn render(cowfile: &DbCowfile) -> Result<SavablePreview> {
-    let chara = Chara::Raw(decode_base64(&cowfile.data)?);
-    let result = format_character(MESSAGE, &chara, 80, charasay::bubbles::BubbleType::Round).map_err(|err| anyhow!("{}", err.to_string()))?;
-    let font = include_bytes!("../../../assets/font/JetBrainsMonoNerdFont-Regular.ttf").to_vec();
-    let bold_font = include_bytes!("../../../assets/font/JetBrainsMonoNerdFont-Bold.ttf").to_vec();
-
-    let image = cowparse::ImageBuilder::from(&result)
-        .set_font(font)
-        .set_bubble_font(bold_font)
-        .build()
-        .map_err(|err| anyhow!("{}", err.to_string()))?;
-
-    Ok(image)
-}
 
 #[celery::task]
 pub async fn gen_previews() -> TaskResult<()> {
@@ -40,10 +16,7 @@ pub async fn gen_previews() -> TaskResult<()> {
     for cowfile in cowfiles {
         let pool = pool.clone();
         job_set.spawn(async move {
-            let cid = cowfile.id.clone();
-            let image = render(&cowfile).unwrap();
-            let path = save_preview(&cid, &image).await?;
-            save_preview_db(&pool, &cid, &path).await?;
+            previews::gen_preview(&pool, &cowfile).await?;
             Ok(())
         });
     }

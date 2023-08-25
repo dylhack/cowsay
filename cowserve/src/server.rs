@@ -80,7 +80,7 @@ impl CowfilesManager for CowManager {
     async fn get_preview(&self, request: Request<GetPreviewRequest>) -> Result<Response<Preview>, Status> {
         let msg = request.get_ref();
         println!("{:?}", request);
-        match get_preview(&msg.id).await {
+        match get_preview(&self.pool, &msg.id).await {
             Ok(data) => Ok(Response::new(Preview { data })),
             Err(msg) => Err(Status::internal(msg.to_string())),
         }

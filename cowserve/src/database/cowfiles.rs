@@ -32,7 +32,7 @@ pub struct DbCowfileDescriptor {
     pub server_id: Option<String>,
 }
 
-fn map_db_cowfile(row: &DbCowfile) -> Cowfile {
+pub fn map_db_cowfile(row: &DbCowfile) -> Cowfile {
     let author = if let Some(author) = &row.author {
         author.clone()
     } else {
@@ -49,7 +49,7 @@ fn map_db_cowfile(row: &DbCowfile) -> Cowfile {
     }
 }
 
-fn map_db_cowfile_descriptor(row: &DbCowfileDescriptor) -> CowfileDescriptor {
+pub fn map_db_cowfile_descriptor(row: &DbCowfileDescriptor) -> CowfileDescriptor {
     let author = if let Some(author) = &row.author {
         author.clone()
     } else {
