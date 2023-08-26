@@ -1,9 +1,4 @@
-use crate::proto::cowfiles::Cowfile;
-
-use super::{
-    cowfiles::{map_db_cowfile, DbCowfile},
-    Client,
-};
+use super::{cowfiles::DbCowfileDescriptor, Client};
 use anyhow::Result;
 
 #[allow(dead_code)]
@@ -22,10 +17,9 @@ const FILE_PATH: i16 = 0;
 #[allow(dead_code)]
 const URL: i16 = 1;
 
-pub async fn get_unresolved(pool: &Client) -> Result<Vec<Cowfile>> {
-    let mut result = vec![];
+pub async fn get_unresolved(pool: &Client) -> Result<Vec<DbCowfileDescriptor>> {
     let data = sqlx::query_as!(
-        DbCowfile,
+        DbCowfileDescriptor,
         "
 SELECT
   *
@@ -42,11 +36,7 @@ WHERE
     .fetch_all(pool)
     .await?;
 
-    for cowfile in data {
-        result.push(map_db_cowfile(&cowfile));
-    }
-
-    Ok(result)
+    Ok(data)
 }
 
 pub async fn save_preview(pool: &Client, cow_id: &String, source: &String) -> Result<()> {

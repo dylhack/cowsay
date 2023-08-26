@@ -1,12 +1,12 @@
 mod config;
+mod cowsay;
 mod database;
 mod jobs;
 mod proto;
 mod server;
 mod services;
-use std::{sync::Arc, env};
 use anyhow::Result;
-
+use std::{env, sync::Arc};
 
 async fn consumer() -> Result<()> {
     let queue = jobs::get_client().await.unwrap();
@@ -18,7 +18,7 @@ async fn consumer() -> Result<()> {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let args=  env::args();
+    let args = env::args();
 
     if args.last().unwrap_or("".to_string()) == "consume" {
         println!("Running as consumer");

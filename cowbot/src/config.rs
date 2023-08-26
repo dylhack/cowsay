@@ -17,7 +17,7 @@ pub fn get_contact_url() -> String {
     var("CONTACT_URL").unwrap_or(String::from("https://github.com/dylhack/cowsay"))
 }
 
-#[cfg(feature = "cowserve")]
+#[cfg(not(feature = "standalone"))]
 pub fn get_server_url() -> String {
-    var("SERVER_URL").unwrap_or(String::from("localhost:5005"))
+    var("SERVER_URL").unwrap_or(String::from("localhost:5411"))
 }

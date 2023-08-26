@@ -1,21 +1,18 @@
-use std::{borrow::Cow, io::Cursor};
-
 use crate::{
     client,
-    cowsay::{cowsay, cowsay_to_image},
     fortune::get_fortune,
     types::{CommandResult, Response},
 };
 use anyhow::Result;
-use charasay::Chara;
-use image::ImageFormat;
 use serenity::{
     builder::CreateApplicationCommand,
     model::prelude::{
-        application_command::ApplicationCommandInteraction, autocomplete::AutocompleteInteraction, AttachmentType,
+        application_command::ApplicationCommandInteraction, autocomplete::AutocompleteInteraction,
+        AttachmentType,
     },
     prelude::Context as SerenityContext,
 };
+use std::borrow::Cow;
 
 const CHAR_OPTION_ID: &str = "character";
 const MSG_OPTION_ID: &str = "message";
@@ -27,7 +24,7 @@ pub fn register() -> CreateApplicationCommand {
         .create_option(|opt| {
             opt.name(CHAR_OPTION_ID)
                 .description("The character to use.")
-                .required(false)
+                .required(true)
                 .set_autocomplete(true)
                 .kind(serenity::model::prelude::command::CommandOptionType::String)
         })
@@ -41,13 +38,12 @@ pub fn register() -> CreateApplicationCommand {
 }
 
 pub async fn handle(ctx: &SerenityContext, cmd: &ApplicationCommandInteraction) -> CommandResult {
-    let server_id = cmd.guild_id.and_then(|id| Some(id.to_string()));
-    let mut chara_name = "cow";
+    let mut chara_id = None;
     let mut message = String::new();
     cmd.data.options.iter().for_each(|opt| {
         if opt.name == CHAR_OPTION_ID {
-            if let Some(name) = opt.value.as_ref().unwrap().as_str() {
-                chara_name = name;
+            if let Some(id) = opt.value.as_ref().unwrap().as_str() {
+                chara_id = Some(id);
             }
         }
         if opt.name == MSG_OPTION_ID {
@@ -60,24 +56,23 @@ pub async fn handle(ctx: &SerenityContext, cmd: &ApplicationCommandInteraction) 
         }
     });
 
-    let chara = if chara_name == "cow" {
-        Chara::Builtin("cow".to_string())
-    } else {
-        Chara::Raw(client::get_cowfile_by_name(server_id, chara_name).await?)
-    };
+    if chara_id.is_none() {
+        return Response::err("No character specified.");
+    }
 
+    let chara = chara_id.unwrap();
     if message.len() == 0 {
         message = get_fortune();
     }
 
-    let mut bytes: Vec<u8> = Vec::new();
-    let image = cowsay_to_image(&cowsay(&chara, &message)?)?;
-    image.write_to(&mut Cursor::new(&mut bytes), ImageFormat::WebP)?;
-
+    let bytes = client::cowsay(chara, &message).await?;
     if let Err(why) = cmd
         .create_interaction_response(&ctx.http, |f| {
             f.interaction_response_data(|f| {
-                f.add_file(AttachmentType::Bytes { data: Cow::Owned(bytes), filename: format!("{}.webp", chara_name) });
+                f.add_file(AttachmentType::Bytes {
+                    data: Cow::Owned(bytes),
+                    filename: format!("{}.webp", chara),
+                });
                 f
             })
         })
@@ -105,7 +100,7 @@ pub async fn autocomplete(ctx: &SerenityContext, auto: &AutocompleteInteraction)
                     continue;
                 }
             }
-            resp.add_string_choice(cowfile.name.clone(), cowfile.name.clone());
+            resp.add_string_choice(cowfile.name.clone(), cowfile.id.clone());
         }
         resp
     })

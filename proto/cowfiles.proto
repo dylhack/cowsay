@@ -4,10 +4,11 @@ package cowfiles;
 
 // The greeting service definition.
 service CowfilesManager {
-  rpc SaveCowfile (SaveCowfileRequest) returns (Cowfile) {};
+  rpc SaveCowfile (SaveCowfileRequest) returns (CowfileDescriptor);
   rpc GetCowfiles (GetCowfilesRequest) returns (Cowfiles);
-  rpc GetCowfile (GetCowfileRequest) returns (Cowfile);
+  rpc GetCowfile (GetCowfileRequest) returns (CowfileDescriptor);
   rpc GetPreview (GetPreviewRequest) returns (Preview);
+  rpc GetCowsay (GetCowsayRequest) returns (Cowsay);
 }
 
 message SaveCowfileRequest {
@@ -31,14 +32,11 @@ message GetPreviewRequest {
     string id = 1;
 }
 
-message Cowfile {
-    string id = 1;
-    optional string server_id = 2;
-    string name = 3;
-    // Base64 encoded cowfile
-    string author = 4;
-    string uploader_id = 5;
-    string data = 6;
+message GetCowsayRequest {
+    string chara_id = 1;
+    string message = 2;
+    bytes font = 3;
+    optional bytes bubble_font = 4;
 }
 
 message CowfileDescriptor {
@@ -54,5 +52,9 @@ message Cowfiles {
 }
 
 message Preview {
+    bytes data = 1;
+}
+
+message Cowsay {
     bytes data = 1;
 }

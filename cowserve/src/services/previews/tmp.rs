@@ -1,10 +1,9 @@
+use crate::config::get_previews_path;
+use anyhow::{anyhow, Result};
 use std::{
     fs::create_dir,
     path::{Path, PathBuf},
 };
-use anyhow::{anyhow, Result};
-use crate::config::get_previews_path;
-
 
 pub fn get_path(filename: &str) -> Result<PathBuf> {
     let env_dir = get_previews_path();
@@ -15,5 +14,5 @@ pub fn get_path(filename: &str) -> Result<PathBuf> {
         }
     }
 
-   Ok(root.join(Path::new(filename)))
+    Ok(root.join(Path::new(filename)))
 }

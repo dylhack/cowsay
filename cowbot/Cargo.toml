@@ -4,15 +4,15 @@ version = "0.1.0"
 edition = "2021"
 
 [features]
-cowserve = []
-default = ["cowserve"]
+standalone = ["charasay"]
+default = []
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [dependencies]
 ansi_colours = "1.2.2"
 anyhow = "1.0.75"
 base64 = "0.21.2"
-charasay = { version = "3.0.1", git = "https://github.com/dylhack/charasay" }
+charasay = { version = "3.1.0", optional = true }
 prost = "0.11.9"
 rand = "0.8.5"
 rusttype = "0.9.3"

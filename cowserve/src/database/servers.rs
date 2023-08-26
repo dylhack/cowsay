@@ -1,7 +1,6 @@
 use anyhow::{anyhow, Result};
 use sqlx::{Pool, Postgres};
 
-
 #[allow(dead_code)]
 #[derive(sqlx::FromRow)]
 struct DbServer {

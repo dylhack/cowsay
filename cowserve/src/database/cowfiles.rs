@@ -1,26 +1,11 @@
 use crate::{
-    database::{
-      servers::get_server_id,
-      users::get_user_id
-    },
-    proto::cowfiles::{Cowfile, CowfileDescriptor},
+    database::{servers::get_server_id, users::get_user_id},
+    proto::cowfiles::CowfileDescriptor,
 };
 use anyhow::{anyhow, Result};
 use sqlx::{Pool, Postgres};
 
-#[allow(dead_code)]
-#[derive(sqlx::FromRow)]
-pub struct DbCowfile {
-    pub id: String,
-    pub name: String,
-    pub data: String,
-    pub uploader_id: String,
-    pub author: Option<String>,
-    pub server_id: Option<String>,
-    pub created_at: chrono::NaiveDateTime,
-    pub updated_at: chrono::NaiveDateTime,
-    pub deleted_at: Option<chrono::NaiveDateTime>,
-}
+use super::cowdata::save_cowdata;
 
 #[allow(dead_code)]
 #[derive(sqlx::FromRow)]
@@ -28,28 +13,15 @@ pub struct DbCowfileDescriptor {
     pub id: String,
     pub name: String,
     pub uploader_id: String,
+    pub data_id: String,
     pub author: Option<String>,
     pub server_id: Option<String>,
+    pub created_at: chrono::NaiveDateTime,
+    pub updated_at: chrono::NaiveDateTime,
+    pub deleted_at: Option<chrono::NaiveDateTime>,
 }
 
-pub fn map_db_cowfile(row: &DbCowfile) -> Cowfile {
-    let author = if let Some(author) = &row.author {
-        author.clone()
-    } else {
-        "Unknown".to_string()
-    };
-
-    Cowfile {
-        id: row.id.clone(),
-        name: row.name.clone(),
-        data: row.data.clone(),
-        server_id: row.server_id.clone(),
-        uploader_id: row.uploader_id.clone(),
-        author,
-    }
-}
-
-pub fn map_db_cowfile_descriptor(row: &DbCowfileDescriptor) -> CowfileDescriptor {
+pub fn map_db_cowfile(row: &DbCowfileDescriptor) -> CowfileDescriptor {
     let author = if let Some(author) = &row.author {
         author.clone()
     } else {
@@ -79,17 +51,11 @@ pub async fn get_cowfiles(
     let result = sqlx::query_as!(
         DbCowfileDescriptor,
         "
-SELECT DISTINCT
-  id,
-  name,
-  uploader_id,
-  author,
-  server_id
-FROM
-  cowsay.cowfiles
+SELECT * FROM cowsay.cowfiles
 WHERE
   server_id = $1
   OR cowsay.cowfiles.server_id IS NULL
+  AND cowsay.cowfiles.deleted_at IS NULL
 ORDER BY
   cowsay.cowfiles.server_id;
 ",
@@ -101,7 +67,7 @@ ORDER BY
     let mut cowfiles = Vec::new();
 
     for row in result {
-        cowfiles.push(map_db_cowfile_descriptor(&row));
+        cowfiles.push(map_db_cowfile(&row));
     }
 
     Ok(cowfiles)
@@ -109,9 +75,9 @@ ORDER BY
 
 /// Get a cowfile by name.
 /// - server_id is Discord server ID
-pub async fn get_cowfile(pool: &Pool<Postgres>, id: &str) -> Result<Cowfile> {
+pub async fn get_cowfile(pool: &Pool<Postgres>, id: &str) -> Result<CowfileDescriptor> {
     let row = sqlx::query_as!(
-        DbCowfile,
+        DbCowfileDescriptor,
         "
 SELECT
   cowsay.cowfiles.*
@@ -135,9 +101,9 @@ pub async fn get_cowfile_by_name(
     pool: &Pool<Postgres>,
     name: &str,
     server_id: &str,
-) -> Result<Cowfile> {
+) -> Result<CowfileDescriptor> {
     let row = sqlx::query_as!(
-        DbCowfile,
+        DbCowfileDescriptor,
         "
 SELECT
   cowsay.cowfiles.*
@@ -172,9 +138,9 @@ pub async fn save_cowfile(
     name: &str,
     server_id: &str,
     uploader_id: &str,
-    author: Option<String>,
+    author: &Option<String>,
     data: &str,
-) -> Result<Cowfile> {
+) -> Result<CowfileDescriptor> {
     let server = get_server_id(pool, server_id).await?;
     let user = get_user_id(pool, uploader_id).await?;
     let default_author = "Unknown".to_string();
@@ -183,11 +149,13 @@ pub async fn save_cowfile(
         return Err(anyhow::anyhow!("Cowfile already exists."));
     }
 
+    let data_id = save_cowdata(pool, data).await?;
+
     let row = sqlx::query_as!(
-        DbCowfile,
+        DbCowfileDescriptor,
         "
   INSERT INTO
-    cowsay.cowfiles (name, server_id, uploader_id, author, data)
+    cowsay.cowfiles (name, server_id, uploader_id, author, data_id)
   VALUES
     (
       $1,
@@ -202,8 +170,8 @@ pub async fn save_cowfile(
         server,
         user,
         // TODO(dylhack): investigate why Option<str> isn't working here
-        author.unwrap_or(default_author),
-        data
+        author.clone().unwrap_or(default_author),
+        data_id
     )
     .fetch_one(pool)
     .await?;

@@ -12,7 +12,7 @@ RUN cargo build --release
 FROM base AS cowbot-standalone-builder
 
 WORKDIR /opt/cowsay/cowbot
-RUN cargo build --release --no-default-features
+RUN cargo build --release --features standalone
 
 FROM base AS cowserve-builder
 

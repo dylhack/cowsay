@@ -1,8 +1,8 @@
 pub mod previews;
-use std::sync::Arc;
+use crate::config;
 use anyhow::Result;
 use celery::Celery;
-use crate::config;
+use std::sync::Arc;
 
 pub async fn get_client() -> Result<Arc<Celery>> {
     let url = config::get_queue_url();
@@ -18,9 +18,7 @@ pub async fn get_client() -> Result<Arc<Celery>> {
     Ok(queue)
 }
 
-
 pub async fn init_jobs(client: &Celery) {
-
     if let Err(why) = client.send_task(previews::gen_previews::new()).await {
         println!("Failed to send task: {:?}", why);
     }

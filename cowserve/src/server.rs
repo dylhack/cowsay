@@ -2,11 +2,14 @@ use std::sync::Arc;
 
 use crate::{
     config::get_server_port,
+    cowsay::cowsay,
     database::{get_cowfile, get_cowfiles, save_cowfile},
     proto::cowfiles::{
         cowfiles_manager_server::{CowfilesManager, CowfilesManagerServer},
-        Cowfile, Cowfiles, GetCowfileRequest, GetCowfilesRequest, SaveCowfileRequest, GetPreviewRequest, Preview
-    }, services::previews::get_preview,
+        CowfileDescriptor, Cowfiles, Cowsay, GetCowfileRequest, GetCowfilesRequest,
+        GetCowsayRequest, GetPreviewRequest, Preview, SaveCowfileRequest,
+    },
+    services::previews::get_preview,
 };
 use anyhow::Result;
 use async_trait::async_trait;
@@ -30,7 +33,7 @@ impl CowfilesManager for CowManager {
     async fn save_cowfile(
         &self,
         request: Request<SaveCowfileRequest>,
-    ) -> Result<Response<Cowfile>, Status> {
+    ) -> Result<Response<CowfileDescriptor>, Status> {
         let msg: &SaveCowfileRequest = request.get_ref();
         println!("{:?}", request);
         match save_cowfile(
@@ -38,17 +41,21 @@ impl CowfilesManager for CowManager {
             &msg.name,
             &msg.server_id,
             &msg.uploader_id,
-            msg.author.clone(),
+            &msg.author,
             &msg.data,
         )
         .await
         {
             Ok(reply) => {
-                if let Err(why) = self.queue.send_task(crate::jobs::previews::gen_previews::new()).await {
+                if let Err(why) = self
+                    .queue
+                    .send_task(crate::jobs::previews::gen_previews::new())
+                    .await
+                {
                     println!("Error sending task: {:?}", why);
                 }
                 Ok(Response::new(reply))
-            },
+            }
             Err(msg) => Err(Status::internal(msg.to_string())),
         }
     }
@@ -68,7 +75,7 @@ impl CowfilesManager for CowManager {
     async fn get_cowfile(
         &self,
         request: Request<GetCowfileRequest>,
-    ) -> Result<Response<Cowfile>, Status> {
+    ) -> Result<Response<CowfileDescriptor>, Status> {
         let msg = request.get_ref();
         println!("{:?}", request);
         match get_cowfile(&self.pool, &msg.id).await {
@@ -77,11 +84,25 @@ impl CowfilesManager for CowManager {
         }
     }
 
-    async fn get_preview(&self, request: Request<GetPreviewRequest>) -> Result<Response<Preview>, Status> {
+    async fn get_preview(
+        &self,
+        request: Request<GetPreviewRequest>,
+    ) -> Result<Response<Preview>, Status> {
         let msg = request.get_ref();
         println!("{:?}", request);
         match get_preview(&self.pool, &msg.id).await {
             Ok(data) => Ok(Response::new(Preview { data })),
+            Err(msg) => Err(Status::internal(msg.to_string())),
+        }
+    }
+
+    async fn get_cowsay(
+        &self,
+        request: Request<GetCowsayRequest>,
+    ) -> Result<Response<Cowsay>, Status> {
+        let msg = request.get_ref();
+        match cowsay(&self.pool, msg.clone()).await {
+            Ok(data) => Ok(Response::new(data)),
             Err(msg) => Err(Status::internal(msg.to_string())),
         }
     }
