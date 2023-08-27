@@ -6,9 +6,9 @@ mod types;
 
 #[tokio::main]
 async fn main() {
-    #[cfg(feature = "cowserve")]
+    #[cfg(not(feature = "standalone"))]
     println!("Starting cowbot...");
-    #[cfg(not(feature = "cowserve"))]
+    #[cfg(feature = "standalone")]
     println!("Starting cowbot... (standalone)");
     bot::start().await;
 }

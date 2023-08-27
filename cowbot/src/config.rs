@@ -19,5 +19,6 @@ pub fn get_contact_url() -> String {
 
 #[cfg(not(feature = "standalone"))]
 pub fn get_server_url() -> String {
-    var("SERVER_URL").unwrap_or(String::from("localhost:5411"))
+    let host = var("SERVER_URL").unwrap_or(String::from("localhost:5411"));
+    format!("http://{}", host)
 }
