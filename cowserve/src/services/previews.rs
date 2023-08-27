@@ -22,6 +22,7 @@ async fn render(pool: &Client, cid: &str) -> Result<Cowsay> {
             bubble_font: Some(BOLD_FONT.to_vec()),
             font: FONT.to_vec(),
             message: MESSAGE.to_string(),
+            no_bubble: Some(true)
         },
     )
     .await?)

@@ -33,6 +33,10 @@ pub async fn cowsay(pool: &Client, opt: GetCowsayRequest) -> Result<Cowsay> {
         builder = builder.set_bubble_font(bubble_font);
     }
 
+    if let Some(no_bubble) = opt.no_bubble {
+        builder = builder.set_no_bubble(no_bubble);
+    }
+
     let image = builder
         .build()
         .map_err(|err| anyhow!("{}", err.to_string()))?;

@@ -33,6 +33,7 @@ pub async fn cowsay(cid: &str, msg: &str) -> Result<Vec<u8>> {
             message: msg.to_string(),
             font: FONT.to_vec(),
             bubble_font: Some(FONT_BOLD.to_vec()),
+            no_bubble: None
         })
         .await?;
 

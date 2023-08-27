@@ -37,6 +37,7 @@ message GetCowsayRequest {
     string message = 2;
     bytes font = 3;
     optional bytes bubble_font = 4;
+    optional bool no_bubble = 5;
 }
 
 message CowfileDescriptor {

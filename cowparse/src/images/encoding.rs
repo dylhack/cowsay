@@ -63,6 +63,7 @@ pub struct ImageBuilder {
     // optional
     bubble_font: Option<Vec<u8>>,
     font_size: i32,
+    no_bubble: bool,
 }
 
 impl ImageBuilder {
@@ -84,6 +85,7 @@ impl ImageBuilder {
             font: None,
             bubble_font: None,
             font_size: 20,
+            no_bubble: false,
         }
     }
 
@@ -99,6 +101,11 @@ impl ImageBuilder {
 
     pub fn set_font_size(mut self, font_size: i32) -> ImageBuilder {
         self.font_size = font_size;
+        self
+    }
+
+    pub fn set_no_bubble(mut self, b: bool) -> ImageBuilder {
+        self.no_bubble = b;
         self
     }
 
@@ -128,8 +135,13 @@ impl ImageBuilder {
                 let char = if block.char == ORIGINAL_CHAR && original_color.is_some() {
                     BLOCK_CHAR
                 } else {
-                    block.char
+                    if self.no_bubble {
+                        ' '
+                    } else {
+                        block.char
+                    }
                 };
+
                 let font = if char == BLOCK_CHAR {
                     &font
                 } else {
