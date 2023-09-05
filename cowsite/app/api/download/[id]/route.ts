@@ -1,4 +1,4 @@
-import { getCowfile } from "@/app/api";
+import { getCowdata, getCowfile } from "@/app/_api/cowserve";
 import { gRPCError } from "@/app/types";
 import { NextResponse } from "next/server";
 
@@ -11,12 +11,12 @@ type Context = {
 
 export async function GET(_req: Request, { params }: Context) {
     try {
-        const cowfile = (await getCowfile(params.id)).toObject();
+        const cowfile = await getCowdata(params.id);
         const data = Buffer.from(cowfile.data, 'base64').toString('utf-8');
         return new NextResponse(data, {
             headers: {
                 'Content-Type': 'text/plain',
-                'Content-Disposition': `attachment; filename="${cowfile.name}.cow"`,
+                'Content-Disposition': `attachment; filename="${params.id}.cow"`,
             },
         });
     } catch (error) {

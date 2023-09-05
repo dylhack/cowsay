@@ -3,11 +3,11 @@ use std::sync::Arc;
 use crate::{
     config::get_server_port,
     cowsay::cowsay,
-    database::{get_cowfile, get_cowfiles, save_cowfile},
+    database::{get_cowfile, get_cowfiles, save_cowfile, cowdata::get_cowdata},
     proto::cowfiles::{
         cowfiles_manager_server::{CowfilesManager, CowfilesManagerServer},
-        CowfileDescriptor, Cowfiles, Cowsay, GetCowfileRequest, GetCowfilesRequest,
-        GetCowsayRequest, GetPreviewRequest, Preview, SaveCowfileRequest,
+        CowfileDescriptor, Cowfiles, CowsayData, GetCowfileRequest, GetCowfilesRequest,
+        Preview, SaveCowfileRequest, GetCowsayRequest, CowfileData,
     },
     services::previews::get_preview,
 };
@@ -86,7 +86,7 @@ impl CowfilesManager for CowManager {
 
     async fn get_preview(
         &self,
-        request: Request<GetPreviewRequest>,
+        request: Request<GetCowfileRequest>,
     ) -> Result<Response<Preview>, Status> {
         let msg = request.get_ref();
         println!("{:?}", request);
@@ -96,10 +96,22 @@ impl CowfilesManager for CowManager {
         }
     }
 
-    async fn get_cowsay(
+    async fn get_cowdata(
+        &self,
+        request: Request<GetCowfileRequest>
+    ) -> Result<Response<CowfileData>, Status> {
+        let msg = request.get_ref();
+        println!("{:?}", request);
+        match get_cowdata(&self.pool, &msg.id).await {
+            Ok(data) => Ok(Response::new(CowfileData { data })),
+            Err(msg) => Err(Status::internal(msg.to_string())),
+        }
+    }
+
+    async fn cowsay(
         &self,
         request: Request<GetCowsayRequest>,
-    ) -> Result<Response<Cowsay>, Status> {
+    ) -> Result<Response<CowsayData>, Status> {
         let msg = request.get_ref();
         match cowsay(&self.pool, msg.clone()).await {
             Ok(data) => Ok(Response::new(data)),

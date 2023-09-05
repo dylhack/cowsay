@@ -28,7 +28,7 @@ pub async fn get_cowfiles(server_id: Option<String>) -> Result<Vec<CowfileDescri
 pub async fn cowsay(cid: &str, msg: &str) -> Result<Vec<u8>> {
     let mut client = connect().await?;
     let cowsay = client
-        .get_cowsay(GetCowsayRequest {
+        .cowsay(GetCowsayRequest {
             chara_id: cid.to_string(),
             message: msg.to_string(),
             font: FONT.to_vec(),

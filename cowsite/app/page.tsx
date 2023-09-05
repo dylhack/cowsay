@@ -1,19 +1,9 @@
-import { getCowfiles } from './api';
-import Cowfile from './components/Cowfile';
 
-
-export default async function Home() {
-  const cowfiles = await getCowfiles();
+export default function Home() {
 
   return (
     <main>
-      <h1>Cowsite</h1>
-      {/* tailwind css */}
-      <div className="flex flex-wrap justify-center gap-5">
-        {cowfiles.map((cowfile) => (
-          <Cowfile key={cowfile.getName()} {...cowfile.toObject()} />
-        ))}
-      </div>
+      <h1 className="text-white text-6xl">Goto /gallery</h1>
     </main>
-  )
+  );
 }

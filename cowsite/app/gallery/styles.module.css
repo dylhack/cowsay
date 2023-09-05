@@ -1,0 +1,13 @@
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 30px 110px;
+    text-align: center;
+
+    button {
+        width: 250px;
+    }
+}
+

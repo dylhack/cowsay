@@ -84,61 +84,45 @@ export namespace GetCowfileRequest {
     }
 }
 
-export class GetPreviewRequest extends jspb.Message { 
-    getId(): string;
-    setId(value: string): GetPreviewRequest;
+export class GetCowsayRequest extends jspb.Message { 
+    getCharaId(): string;
+    setCharaId(value: string): GetCowsayRequest;
+    getMessage(): string;
+    setMessage(value: string): GetCowsayRequest;
+    getFont(): Uint8Array | string;
+    getFont_asU8(): Uint8Array;
+    getFont_asB64(): string;
+    setFont(value: Uint8Array | string): GetCowsayRequest;
+
+    hasBubbleFont(): boolean;
+    clearBubbleFont(): void;
+    getBubbleFont(): Uint8Array | string;
+    getBubbleFont_asU8(): Uint8Array;
+    getBubbleFont_asB64(): string;
+    setBubbleFont(value: Uint8Array | string): GetCowsayRequest;
+
+    hasNoBubble(): boolean;
+    clearNoBubble(): void;
+    getNoBubble(): boolean | undefined;
+    setNoBubble(value: boolean): GetCowsayRequest;
 
     serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): GetPreviewRequest.AsObject;
-    static toObject(includeInstance: boolean, msg: GetPreviewRequest): GetPreviewRequest.AsObject;
+    toObject(includeInstance?: boolean): GetCowsayRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: GetCowsayRequest): GetCowsayRequest.AsObject;
     static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
     static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: GetPreviewRequest, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): GetPreviewRequest;
-    static deserializeBinaryFromReader(message: GetPreviewRequest, reader: jspb.BinaryReader): GetPreviewRequest;
+    static serializeBinaryToWriter(message: GetCowsayRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetCowsayRequest;
+    static deserializeBinaryFromReader(message: GetCowsayRequest, reader: jspb.BinaryReader): GetCowsayRequest;
 }
 
-export namespace GetPreviewRequest {
+export namespace GetCowsayRequest {
     export type AsObject = {
-        id: string,
-    }
-}
-
-export class Cowfile extends jspb.Message { 
-    getId(): string;
-    setId(value: string): Cowfile;
-
-    hasServerId(): boolean;
-    clearServerId(): void;
-    getServerId(): string | undefined;
-    setServerId(value: string): Cowfile;
-    getName(): string;
-    setName(value: string): Cowfile;
-    getAuthor(): string;
-    setAuthor(value: string): Cowfile;
-    getUploaderId(): string;
-    setUploaderId(value: string): Cowfile;
-    getData(): string;
-    setData(value: string): Cowfile;
-
-    serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): Cowfile.AsObject;
-    static toObject(includeInstance: boolean, msg: Cowfile): Cowfile.AsObject;
-    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: Cowfile, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): Cowfile;
-    static deserializeBinaryFromReader(message: Cowfile, reader: jspb.BinaryReader): Cowfile;
-}
-
-export namespace Cowfile {
-    export type AsObject = {
-        id: string,
-        serverId?: string,
-        name: string,
-        author: string,
-        uploaderId: string,
-        data: string,
+        charaId: string,
+        message: string,
+        font: Uint8Array | string,
+        bubbleFont: Uint8Array | string,
+        noBubble?: boolean,
     }
 }
 
@@ -218,5 +202,47 @@ export class Preview extends jspb.Message {
 export namespace Preview {
     export type AsObject = {
         data: Uint8Array | string,
+    }
+}
+
+export class CowsayData extends jspb.Message { 
+    getData(): Uint8Array | string;
+    getData_asU8(): Uint8Array;
+    getData_asB64(): string;
+    setData(value: Uint8Array | string): CowsayData;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): CowsayData.AsObject;
+    static toObject(includeInstance: boolean, msg: CowsayData): CowsayData.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: CowsayData, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): CowsayData;
+    static deserializeBinaryFromReader(message: CowsayData, reader: jspb.BinaryReader): CowsayData;
+}
+
+export namespace CowsayData {
+    export type AsObject = {
+        data: Uint8Array | string,
+    }
+}
+
+export class CowfileData extends jspb.Message { 
+    getData(): string;
+    setData(value: string): CowfileData;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): CowfileData.AsObject;
+    static toObject(includeInstance: boolean, msg: CowfileData): CowfileData.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: CowfileData, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): CowfileData;
+    static deserializeBinaryFromReader(message: CowfileData, reader: jspb.BinaryReader): CowfileData;
+}
+
+export namespace CowfileData {
+    export type AsObject = {
+        data: string,
     }
 }

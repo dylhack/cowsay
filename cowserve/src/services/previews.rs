@@ -2,7 +2,7 @@ mod tmp;
 use crate::{
     cowsay::cowsay,
     database::{previews::save_preview as save_preview_db, Client},
-    proto::cowfiles::{Cowsay, GetCowsayRequest},
+    proto::cowfiles::{CowsayData, GetCowsayRequest},
 };
 use anyhow::{anyhow, Result};
 use std::path::PathBuf;
@@ -14,7 +14,7 @@ const FONT: &[u8; 2063520] =
 const BOLD_FONT: &[u8; 2067288] =
     include_bytes!("../../../assets/font/JetBrainsMonoNerdFont-Bold.ttf");
 
-async fn render(pool: &Client, cid: &str) -> Result<Cowsay> {
+async fn render(pool: &Client, cid: &str) -> Result<CowsayData> {
     Ok(cowsay(
         pool,
         GetCowsayRequest {
@@ -41,7 +41,7 @@ pub async fn get_preview(pool: &Client, cid: &str) -> Result<Vec<u8>> {
     Ok(image.data)
 }
 
-pub async fn save_preview(cid: &str, image: Cowsay) -> Result<PathBuf> {
+pub async fn save_preview(cid: &str, image: CowsayData) -> Result<PathBuf> {
     let path = tmp::get_path(&format!("{}.webp", cid))?;
     fs::write(&path, image.data).await?;
 

@@ -7,7 +7,7 @@ use image::ImageFormat;
 
 use crate::{
     database::{cowdata::get_cowdata, Client},
-    proto::cowfiles::{Cowsay, GetCowsayRequest},
+    proto::cowfiles::{CowsayData, GetCowsayRequest},
 };
 
 fn decode_base64(data: &String) -> Result<String> {
@@ -16,7 +16,7 @@ fn decode_base64(data: &String) -> Result<String> {
     Ok(decoded)
 }
 
-pub async fn cowsay(pool: &Client, opt: GetCowsayRequest) -> Result<Cowsay> {
+pub async fn cowsay(pool: &Client, opt: GetCowsayRequest) -> Result<CowsayData> {
     let cowdata = get_cowdata(pool, &opt.chara_id).await?;
     let chara = Chara::Raw(decode_base64(&cowdata)?);
     let result = format_character(
@@ -44,5 +44,5 @@ pub async fn cowsay(pool: &Client, opt: GetCowsayRequest) -> Result<Cowsay> {
     let mut data: Vec<u8> = Vec::new();
     image.write_to(&mut Cursor::new(&mut data), ImageFormat::WebP)?;
 
-    Ok(Cowsay { data })
+    Ok(CowsayData { data })
 }

@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --light-coral: #e07171ff;
+    --tea-rose-red: #f0b8b8ff;
+    --vista-blue: #719fe0ff;
+    --powder-blue: #b8cff0ff;
+    --white: #ffffffff;
+    --eerie-black: #1c1f22ff;
+    --dim-gray: #6e7275ff;
+
+    --danger: var(--light-coral);
+    --danger-light: var(--tea-rose-red);
+    --primary: var(--vista-blue);
+    --primary-light: var(--powder-blue);
+    --black: var(--eerie-black);
+    --gray: var(--dim-gray);
+    --white: var(--white);
+}
+
+body {
+    background: rgb(28, 31, 34);
+}

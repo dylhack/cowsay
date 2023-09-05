@@ -1,4 +1,4 @@
-import { getCowfile, getPreview } from "@/app/api";
+import { getCowfile, getPreview } from "@/app/_api/cowserve";
 import { gRPCError } from "@/app/types";
 import { NextResponse } from "next/server";
 

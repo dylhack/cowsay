@@ -1,0 +1,118 @@
+.button {
+    &:hover {
+        cursor: pointer;
+    }
+    min-width: 50px;
+    min-height: 50px;
+    font-weight: bold;
+}
+
+.button-normal {
+    background-color: #33383E;
+    box-shadow: 
+        0 5px 0 1px #33383E,
+        5px 1px 0 1px #33383E,
+        0 -5px 0 1px #33383E,
+        -5px 0 0 1px #33383E;
+
+
+    &:hover {
+        background-color: #40474F;
+        box-shadow: 
+            0 5px 0 1px #40474F,
+            5px 1px 0 1px #40474F,
+            0 -5px 0 1px #40474F,
+            -5px 0 0 1px #40474F;
+    }
+
+    &:active {
+        background-color: #33383E;
+        box-shadow: 
+            0 5px 0 1px #33383E,
+            5px 1px 0 1px #33383E,
+            0 -5px 0 1px #33383E,
+            -5px 0 0 1px #33383E;
+    }
+}
+
+.button-secondary {
+    background-color: none;
+    box-shadow: 
+        0 5px 0 1px #33383E,
+        5px 1px 0 1px #33383E,
+        0 -5px 0 1px #33383E,
+        -5px 0 0 1px #33383E;
+
+
+    &:hover {
+        box-shadow: 
+            0 5px 0 1px #40474F,
+            5px 1px 0 1px #40474F,
+            0 -5px 0 1px #40474F,
+            -5px 0 0 1px #40474F;
+    }
+
+    &:active {
+        box-shadow: 
+            0 5px 0 1px #33383E,
+            5px 1px 0 1px #33383E,
+            0 -5px 0 1px #33383E,
+            -5px 0 0 1px #33383E;
+    }
+}
+
+.button-primary {
+    color: black;
+    background-color: #719FE0;
+    box-shadow: 
+        0 5px 0 1px #719FE0,
+        5px 1px 0 1px #719FE0,
+        0 -5px 0 1px #719FE0,
+        -5px 0 0 1px #719FE0;
+
+    &:hover {
+        background-color: #8AB0E5;
+        box-shadow: 
+            0 5px 0 1px #8AB0E5,
+            5px 1px 0 1px #8AB0E5,
+            0 -5px 0 1px #8AB0E5,
+            -5px 0 0 1px #8AB0E5;
+    }
+
+    &:active {
+        background-color: #719FE0;
+        box-shadow: 
+            0 5px 0 1px #719FE0,
+            5px 1px 0 1px #719FE0,
+            0 -5px 0 1px #719FE0,
+            -5px 0 0 1px #719FE0;
+    }
+}
+
+.button-danger {
+    color: white;
+    background-color: #E07171;
+    box-shadow: 
+        0 5px 0 1px #E07171,
+        5px 1px 0 1px #E07171,
+        0 -5px 0 1px #E07171,
+        -5px 0 0 1px #E07171;
+
+    &:hover {
+        background-color: #E58A8A;
+        box-shadow: 
+            0 5px 0 1px #E58A8A,
+            5px 1px 0 1px #E58A8A,
+            0 -5px 0 1px #E58A8A,
+            -5px 0 0 1px #E58A8A;
+    }
+
+    &:active {
+        background-color: #E07171;
+        box-shadow: 
+            0 5px 0 1px #E07171,
+            5px 1px 0 1px #E07171,
+            0 -5px 0 1px #E07171,
+            -5px 0 0 1px #E07171;
+    }
+}
