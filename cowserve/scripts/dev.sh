@@ -1,4 +1,7 @@
 #!/bin/bash
 source ../.env
-cargo run --bin cowserve $1
+export DATABASE_URL
+export QUEUE_URL
+export SERVER_PORT
 
+cargo run --bin cowserve $1

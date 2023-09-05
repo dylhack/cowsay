@@ -1,5 +1,5 @@
 BIN=./node_modules/.bin
-API=./api
+API=./app/_api/cowserve
 PROTO=../proto
 JS_PLUGIN=$BIN/grpc_tools_node_protoc_plugin
 TS_PLUGIN=$BIN/protoc-gen-ts

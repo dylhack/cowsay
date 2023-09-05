@@ -25,7 +25,8 @@
 		"vscode": {
 			"extensions": [
 				"zxh404.vscode-proto3",
-				"github.vscode-github-actions"
+				"github.vscode-github-actions",
+				"rust-lang.rust-analyzer"
 			]
 		}
 	}
