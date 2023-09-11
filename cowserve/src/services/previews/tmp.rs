@@ -14,5 +14,5 @@ pub fn get_path(filename: &str) -> Result<PathBuf> {
         }
     }
 
-    Ok(root.join(Path::new(filename)))
+    Ok(root.join(Path::new(filename)).canonicalize()?)
 }

@@ -6,8 +6,8 @@ use charasay::{format_character, Chara};
 use image::ImageFormat;
 
 use crate::{
+    cowfiles::{CowsayData, GetCowsayRequest},
     database::{cowdata::get_cowdata, Client},
-    proto::cowfiles::{CowsayData, GetCowsayRequest},
 };
 
 fn decode_base64(data: &String) -> Result<String> {
