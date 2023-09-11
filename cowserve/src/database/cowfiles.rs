@@ -1,6 +1,6 @@
 use crate::{
+    cowfiles::CowfileDescriptor,
     database::{servers::get_server_id, users::get_user_id},
-    proto::cowfiles::CowfileDescriptor,
 };
 use anyhow::{anyhow, Result};
 use sqlx::{Pool, Postgres};
@@ -84,7 +84,8 @@ SELECT
 FROM
   cowsay.cowfiles
 WHERE
-  id = $1;
+  id = $1
+  AND deleted_at IS NULL;
 ",
         id
     )
@@ -118,7 +119,7 @@ WHERE
       cowsay.servers
     WHERE
       cowsay.servers.discord_id = $2
-  );
+  ) AND deleted_at IS NULL;
 ",
         name,
         server_id
