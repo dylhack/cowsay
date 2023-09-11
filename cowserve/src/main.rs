@@ -1,8 +1,9 @@
 mod config;
-mod cowsay;
+pub mod cowfiles {
+    tonic::include_proto!("cowfiles");
+}
 mod database;
 mod jobs;
-mod proto;
 mod server;
 mod services;
 use anyhow::Result;
@@ -18,9 +19,7 @@ async fn consumer() -> Result<()> {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let args = env::args();
-
-    if args.last().unwrap_or("".to_string()) == "consume" {
+    if env::args().last().unwrap_or("".to_string()) == "consume" {
         println!("Running as consumer");
         consumer().await?;
         return Ok(());
