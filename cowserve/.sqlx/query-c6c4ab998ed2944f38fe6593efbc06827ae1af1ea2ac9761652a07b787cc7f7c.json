@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT * FROM cowsay.users WHERE discord_id = $1;",
+  "query": "\nSELECT\n  cowsay.cowdata.*\nFROM\n  cowsay.cowdata\n  INNER JOIN cowsay.cowfiles ON cowsay.cowdata.id = cowsay.cowfiles.data_id\nWHERE\n  cowsay.cowfiles.id = $1; \n    ",
   "describe": {
     "columns": [
       {
@@ -10,7 +10,7 @@
       },
       {
         "ordinal": 1,
-        "name": "discord_id",
+        "name": "data",
         "type_info": "Text"
       },
       {
@@ -42,5 +42,5 @@
       true
     ]
   },
-  "hash": "1851e661426953116be9f96957b4269985cc11b77729cd6fd8741b03cbb1259d"
+  "hash": "c6c4ab998ed2944f38fe6593efbc06827ae1af1ea2ac9761652a07b787cc7f7c"
 }

@@ -1,29 +1,29 @@
-use std::sync::Arc;
-
+mod interceptor;
 use crate::{
     config::get_server_port,
-    cowsay::cowsay,
-    database::{get_cowfile, get_cowfiles, save_cowfile, cowdata::get_cowdata},
-    proto::cowfiles::{
+    cowfiles::{
         cowfiles_manager_server::{CowfilesManager, CowfilesManagerServer},
-        CowfileDescriptor, Cowfiles, CowsayData, GetCowfileRequest, GetCowfilesRequest,
-        Preview, SaveCowfileRequest, GetCowsayRequest, CowfileData,
+        CowfileData, CowfileDescriptor, Cowfiles, CowsayData, GetCowfileRequest,
+        GetCowfilesRequest, GetCowsayRequest, Preview, SaveCowfileRequest,
     },
-    services::previews::get_preview,
+    database::{cowdata::get_cowdata, get_cowfile, get_cowfiles, save_cowfile, Client},
+    server::interceptor::Interceptor,
+    services::{cowsay::cowsay, previews::get_preview},
 };
 use anyhow::Result;
 use async_trait::async_trait;
 use celery::Celery;
 use sqlx::{Pool, Postgres};
+use std::sync::Arc;
 use tonic::{transport::Server, Request, Response, Status};
 
 pub struct CowManager {
-    pool: Arc<Pool<Postgres>>,
+    pool: Arc<Client>,
     queue: Arc<Celery>,
 }
 
 impl CowManager {
-    pub fn new(pool: Arc<Pool<Postgres>>, queue: Arc<Celery>) -> Self {
+    pub fn new(pool: Arc<Client>, queue: Arc<Celery>) -> Self {
         Self { pool, queue }
     }
 }
@@ -65,7 +65,6 @@ impl CowfilesManager for CowManager {
         request: Request<GetCowfilesRequest>,
     ) -> Result<Response<Cowfiles>, Status> {
         let msg = request.get_ref();
-        println!("{:?}", request);
         match get_cowfiles(&self.pool, msg.server_id.clone()).await {
             Ok(reply) => Ok(Response::new(Cowfiles { cowfiles: reply })),
             Err(msg) => Err(Status::internal(msg.to_string())),
@@ -77,7 +76,6 @@ impl CowfilesManager for CowManager {
         request: Request<GetCowfileRequest>,
     ) -> Result<Response<CowfileDescriptor>, Status> {
         let msg = request.get_ref();
-        println!("{:?}", request);
         match get_cowfile(&self.pool, &msg.id).await {
             Ok(reply) => Ok(Response::new(reply)),
             Err(msg) => Err(Status::internal(msg.to_string())),
@@ -89,7 +87,6 @@ impl CowfilesManager for CowManager {
         request: Request<GetCowfileRequest>,
     ) -> Result<Response<Preview>, Status> {
         let msg = request.get_ref();
-        println!("{:?}", request);
         match get_preview(&self.pool, &msg.id).await {
             Ok(data) => Ok(Response::new(Preview { data })),
             Err(msg) => Err(Status::internal(msg.to_string())),
@@ -98,10 +95,9 @@ impl CowfilesManager for CowManager {
 
     async fn get_cowdata(
         &self,
-        request: Request<GetCowfileRequest>
+        request: Request<GetCowfileRequest>,
     ) -> Result<Response<CowfileData>, Status> {
         let msg = request.get_ref();
-        println!("{:?}", request);
         match get_cowdata(&self.pool, &msg.id).await {
             Ok(data) => Ok(Response::new(CowfileData { data })),
             Err(msg) => Err(Status::internal(msg.to_string())),
@@ -122,12 +118,17 @@ impl CowfilesManager for CowManager {
 
 pub async fn start_server(pool: Arc<Pool<Postgres>>, queue: Arc<Celery>) {
     let addr = format!("0.0.0.0:{}", get_server_port()).parse().unwrap();
-    let cowfiles = CowManager::new(pool, queue);
-
-    println!("listening on {}", addr);
+    let interceptor = Interceptor {
+        pool: Arc::clone(&pool),
+    };
+    let cowfiles = CowfilesManagerServer::with_interceptor(
+        CowManager::new(Arc::clone(&pool), queue),
+        interceptor,
+    );
+    println!("Listening on {}", addr);
 
     Server::builder()
-        .add_service(CowfilesManagerServer::new(cowfiles))
+        .add_service(cowfiles)
         .serve(addr)
         .await
         .expect("Failed to start gRPC server.");

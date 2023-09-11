@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\nSELECT\n  cowsay.cowfiles.*\nFROM\n  cowsay.cowfiles\nWHERE\n  id = $1;\n",
+  "query": "\nSELECT\n  cowsay.cowfiles.*\nFROM\n  cowsay.cowfiles\nWHERE\n  id = $1\n  AND deleted_at IS NULL;\n",
   "describe": {
     "columns": [
       {
@@ -15,38 +15,38 @@
       },
       {
         "ordinal": 2,
-        "name": "data",
-        "type_info": "Text"
-      },
-      {
-        "ordinal": 3,
         "name": "author",
         "type_info": "Text"
       },
       {
-        "ordinal": 4,
+        "ordinal": 3,
         "name": "uploader_id",
         "type_info": "Text"
       },
       {
-        "ordinal": 5,
+        "ordinal": 4,
         "name": "server_id",
         "type_info": "Text"
       },
       {
-        "ordinal": 6,
+        "ordinal": 5,
         "name": "created_at",
         "type_info": "Timestamp"
       },
       {
-        "ordinal": 7,
+        "ordinal": 6,
         "name": "updated_at",
         "type_info": "Timestamp"
       },
       {
-        "ordinal": 8,
+        "ordinal": 7,
         "name": "deleted_at",
         "type_info": "Timestamp"
+      },
+      {
+        "ordinal": 8,
+        "name": "data_id",
+        "type_info": "Text"
       }
     ],
     "parameters": {
@@ -57,14 +57,14 @@
     "nullable": [
       false,
       false,
-      false,
       true,
       false,
       true,
       false,
       false,
-      true
+      true,
+      false
     ]
   },
-  "hash": "65e55ebde12a5349d0902c91505e64efaf13889c02dabc81e37280caace4e8b7"
+  "hash": "c927df75fa0c1a50b01d664858b414d20a9442c0e0c071db57ce8631d34086ec"
 }

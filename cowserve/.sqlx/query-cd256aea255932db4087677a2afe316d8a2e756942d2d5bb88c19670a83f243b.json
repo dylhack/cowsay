@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\nSELECT\n  cowsay.cowfiles.*\nFROM\n  cowsay.cowfiles\nWHERE\n  name = $1\n  AND server_id = (\n    SELECT\n      cowsay.servers.id\n    FROM\n      cowsay.servers\n    WHERE\n      cowsay.servers.discord_id = $2\n  );\n",
+  "query": "\nSELECT\n  cowsay.cowfiles.*\nFROM\n  cowsay.cowfiles\nWHERE\n  name = $1\n  AND server_id = (\n    SELECT\n      cowsay.servers.id\n    FROM\n      cowsay.servers\n    WHERE\n      cowsay.servers.discord_id = $2\n  ) AND deleted_at IS NULL;\n",
   "describe": {
     "columns": [
       {
@@ -15,38 +15,38 @@
       },
       {
         "ordinal": 2,
-        "name": "data",
-        "type_info": "Text"
-      },
-      {
-        "ordinal": 3,
         "name": "author",
         "type_info": "Text"
       },
       {
-        "ordinal": 4,
+        "ordinal": 3,
         "name": "uploader_id",
         "type_info": "Text"
       },
       {
-        "ordinal": 5,
+        "ordinal": 4,
         "name": "server_id",
         "type_info": "Text"
       },
       {
-        "ordinal": 6,
+        "ordinal": 5,
         "name": "created_at",
         "type_info": "Timestamp"
       },
       {
-        "ordinal": 7,
+        "ordinal": 6,
         "name": "updated_at",
         "type_info": "Timestamp"
       },
       {
-        "ordinal": 8,
+        "ordinal": 7,
         "name": "deleted_at",
         "type_info": "Timestamp"
+      },
+      {
+        "ordinal": 8,
+        "name": "data_id",
+        "type_info": "Text"
       }
     ],
     "parameters": {
@@ -58,14 +58,14 @@
     "nullable": [
       false,
       false,
-      false,
       true,
       false,
       true,
       false,
       false,
-      true
+      true,
+      false
     ]
   },
-  "hash": "3b14e4572a80c34463f10ad6d1b968ec59260de19c1eca14121365064d2bc1d2"
+  "hash": "cd256aea255932db4087677a2afe316d8a2e756942d2d5bb88c19670a83f243b"
 }

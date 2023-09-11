@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT * FROM cowsay.servers WHERE discord_id = $1;",
+  "query": "SELECT * FROM cowsay.servers WHERE discord_id = $1 AND deleted_at IS NULL;",
   "describe": {
     "columns": [
       {
@@ -42,5 +42,5 @@
       true
     ]
   },
-  "hash": "5dc90ebf347d7562c06d9c8e2a312c14cb2db0dd8760b9ed913c3a084c44a72b"
+  "hash": "09d38fc30027197a42c55a71418f6084f5b6ce316622e76c030dbb28f6efa51b"
 }

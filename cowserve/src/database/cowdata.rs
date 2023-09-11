@@ -34,7 +34,7 @@ FROM
   cowsay.cowdata
   INNER JOIN cowsay.cowfiles ON cowsay.cowdata.id = cowsay.cowfiles.data_id
 WHERE
-  cowsay.cowfiles.id = $1; 
+  cowsay.cowfiles.id = $1;
     ",
         cid
     )

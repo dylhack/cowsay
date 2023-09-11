@@ -1,3 +1,5 @@
+#[cfg(not(debug_assertions))]
+pub mod clients;
 pub mod cowdata;
 pub mod cowfiles;
 pub mod previews;

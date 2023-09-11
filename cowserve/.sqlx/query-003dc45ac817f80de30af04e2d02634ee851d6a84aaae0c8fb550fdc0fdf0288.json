@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\n  INSERT INTO\n    cowsay.cowfiles (name, server_id, uploader_id, author, data)\n  VALUES\n    (\n      $1,\n      $2,\n      $3,\n      $4,\n      $5\n    )\n  RETURNING *; \n  ",
+  "query": "\nSELECT\n  *\nFROM\n  cowsay.cowfiles\nWHERE\n  cowsay.cowfiles.id NOT IN (\n    SELECT\n      cowsay.previews.cowfile_id\n    FROM\n      cowsay.previews\n  ) AND deleted_at IS NULL;",
   "describe": {
     "columns": [
       {
@@ -15,60 +15,54 @@
       },
       {
         "ordinal": 2,
-        "name": "data",
-        "type_info": "Text"
-      },
-      {
-        "ordinal": 3,
         "name": "author",
         "type_info": "Text"
       },
       {
-        "ordinal": 4,
+        "ordinal": 3,
         "name": "uploader_id",
         "type_info": "Text"
       },
       {
-        "ordinal": 5,
+        "ordinal": 4,
         "name": "server_id",
         "type_info": "Text"
       },
       {
-        "ordinal": 6,
+        "ordinal": 5,
         "name": "created_at",
         "type_info": "Timestamp"
       },
       {
-        "ordinal": 7,
+        "ordinal": 6,
         "name": "updated_at",
         "type_info": "Timestamp"
       },
       {
-        "ordinal": 8,
+        "ordinal": 7,
         "name": "deleted_at",
         "type_info": "Timestamp"
+      },
+      {
+        "ordinal": 8,
+        "name": "data_id",
+        "type_info": "Text"
       }
     ],
     "parameters": {
-      "Left": [
-        "Text",
-        "Text",
-        "Text",
-        "Text",
-        "Text"
-      ]
+      "Left": []
     },
     "nullable": [
       false,
       false,
-      false,
       true,
       false,
       true,
       false,
       false,
-      true
+      true,
+      false
     ]
   },
-  "hash": "55f69f9944a2e4f1506be050adb7dcb2e7190a184988a24db8de66628308af4d"
+  "hash": "003dc45ac817f80de30af04e2d02634ee851d6a84aaae0c8fb550fdc0fdf0288"
 }
