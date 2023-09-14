@@ -56,7 +56,7 @@ WHERE
     Ok(data)
 }
 
-pub async fn save_preview<'a>(pool: &Client, cow_id: &String, source: &URI<'a>) -> Result<()> {
+pub async fn save_preview<'a>(pool: &Client, cow_id: &String, source: &String) -> Result<()> {
     sqlx::query!(
         "
 INSERT INTO
@@ -65,7 +65,7 @@ VALUES
   ($1, $2);
  ",
         cow_id,
-        source.to_string()
+        source
     )
     .execute(pool)
     .await?;

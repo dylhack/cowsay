@@ -40,7 +40,7 @@ pub async fn get_preview(pool: &Client, cid: &str) -> Result<Vec<u8>> {
     Ok(image.data)
 }
 
-async fn save_preview_fs<'uri>(cid: &str, image: &CowsayData) -> Result<URI<'uri>> {
+async fn save_preview_fs<'uri>(cid: &str, image: &CowsayData) -> Result<String> {
     let path = tmp::get_path(&format!("{}.webp", cid))?;
     fs::write(&path, &image.data).await?;
     let path = Path::try_from(path.to_str().unwrap())?;
@@ -49,10 +49,10 @@ async fn save_preview_fs<'uri>(cid: &str, image: &CowsayData) -> Result<URI<'uri
         .with_path(path)
         .build()?;
     
-    Ok(path)
+    Ok(path.to_string())
 }
 
-pub async fn save_preview<'uri>(cid: &str, image: &CowsayData) -> Result<URI<'uri>> {
+pub async fn save_preview<'uri>(cid: &str, image: &CowsayData) -> Result<String> {
     save_preview_fs(cid, image).await
 }
 
