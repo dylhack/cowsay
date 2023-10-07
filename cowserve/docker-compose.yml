@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  cowserve:
+    build:
+      context: .
+      target: cowserve-production
+    restart: on-failure
+    ports:
+      - 5411:5411
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@database:5432/postgres
+      - QUEUE_URL=amqp://rabbit:rabbit@queue:5672/cowsay
+      - SERVER_PORT=5411
+    depends_on:
+      - database
+  cowserve_jobs:
+    build:
+      context: .
+      target: cowserve-production
+    command: cowserve consume
+    restart: on-failure
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@database:5432/postgres
+      - QUEUE_URL=amqp://rabbit:rabbit@queue:5672/cowsay
+      - SERVER_PORT=5411
+      - PREVIEWS_DIR=/tmp/previews
+    depends_on:
+      - queue
+  database:
+    image: postgres:15.4
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=postgres
+  queue:
+    image: rabbitmq:3-management
+    ports:
+      - 5672:5672
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbit
+      - RABBITMQ_DEFAULT_PASS=rabbit
+      - RABBITMQ_DEFAULT_VHOST=cowsay
+
+volumes:
+  database:
+
